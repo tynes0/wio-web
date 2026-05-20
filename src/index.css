@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --canvas: #08111f;
+  --surface: #1b2740;
+  --surface-deep: #121b2f;
+  --line: rgba(220, 234, 255, 0.10);
+  --line-strong: rgba(220, 234, 255, 0.18);
+  --ink: #eff6ff;
+  --ink-soft: #d7e6fb;
+  --muted: #a3b3cb;
+  --muted-strong: #85a7db;
+  --accent: #60a5fa;
+  --accent-deep: #3b82f6;
+  --accent-soft: #93c5fd;
+  --accent-ink: #08111f;
+  --code-bg: #0d1628;
+  --shadow-soft: 0 24px 56px rgba(2, 6, 23, 0.36);
+  --font-body: 'Instrument Sans', 'Segoe UI', sans-serif;
+  --font-heading: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Cascadia Code', monospace;
+
+  color: var(--ink-soft);
+  background: var(--canvas);
+  font: 15px/1.62 var(--font-body);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(96, 165, 250, 0.13), transparent 24%),
+    linear-gradient(180deg, #091120, #0b1324 42%, #11192c 100%);
+}
+
+body,
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  line-height: 1.04;
+}
+
+h1 {
+  font-size: clamp(2.1rem, 3.8vw, 3.5rem);
+  letter-spacing: -0.05em;
+  margin: 0 0 14px;
+}
+
+h2 {
+  font-size: clamp(1.32rem, 1.9vw, 1.92rem);
+  letter-spacing: -0.03em;
+}
+
+h3 {
+  font-size: 1.02rem;
+  margin-bottom: 8px;
+}
+
+p {
+  margin: 0;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
+}
+
+code {
+  padding: 0.16rem 0.36rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+@media (max-width: 760px) {
+  :root {
+    font-size: 14px;
+  }
+}
