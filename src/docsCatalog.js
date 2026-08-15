@@ -106,9 +106,23 @@ export const docsCatalog = [
   {
     id: 'freeze',
     title: 'V1 Freeze Snapshot',
-    category: 'Release',
+    category: 'Pre-v1',
     description: 'What is in scope for Wio v1 and what is intentionally excluded.',
     sourcePath: 'docs/WIO_V1_FREEZE.md',
+  },
+  {
+    id: 'v1-release-plan',
+    title: 'V1 Release Plan',
+    category: 'Pre-v1',
+    description: 'Release-by-release delivery plan, mandatory gates, and scope rules through Wio v1.0.0.',
+    sourcePath: 'docs/WIO_V1_RELEASE_PLAN.md',
+  },
+  {
+    id: 'post-v1-roadmap',
+    title: 'Post-v1 Roadmap',
+    category: 'Post-v1',
+    description: 'Planned v1.x themes, v2 research, ecosystem growth, and deliberately deferred work.',
+    sourcePath: 'docs/WIO_POST_V1_ROADMAP.md',
   },
   {
     id: 'traceability',
@@ -126,6 +140,8 @@ export const categoryOrder = [
   'Tooling',
   'Interop',
   'Support',
+  'Pre-v1',
+  'Post-v1',
   'Release',
 ]
 
