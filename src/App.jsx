@@ -6,7 +6,6 @@ import {
   getRawDocUrl,
   latestReleaseUrl,
   releaseApiUrl,
-  repoUrl,
 } from './docsCatalog'
 import { renderMarkdown } from './markdown'
 
@@ -156,14 +155,14 @@ function navHref(page, docId = defaultDocId) {
 
 function useRemoteMarkdown(sourcePath) {
   const [state, setState] = useState({
-    status: 'idle',
+    sourcePath,
+    status: 'loading',
     content: '',
     error: '',
   })
 
   useEffect(() => {
     let cancelled = false
-    setState({ status: 'loading', content: '', error: '' })
 
     fetch(getRawDocUrl(sourcePath))
       .then(async (response) => {
@@ -174,12 +173,12 @@ function useRemoteMarkdown(sourcePath) {
       })
       .then((content) => {
         if (!cancelled) {
-          setState({ status: 'ready', content, error: '' })
+          setState({ sourcePath, status: 'ready', content, error: '' })
         }
       })
       .catch((error) => {
         if (!cancelled) {
-          setState({ status: 'error', content: '', error: error.message })
+          setState({ sourcePath, status: 'error', content: '', error: error.message })
         }
       })
 
@@ -188,7 +187,9 @@ function useRemoteMarkdown(sourcePath) {
     }
   }, [sourcePath])
 
-  return state
+  return state.sourcePath === sourcePath
+    ? state
+    : { sourcePath, status: 'loading', content: '', error: '' }
 }
 
 function TopNav({ page }) {
@@ -528,7 +529,7 @@ function App() {
   const [docSearch, setDocSearch] = useState('')
   const deferredSearch = useDeferredValue(docSearch)
   const [releaseState, setReleaseState] = useState({
-    status: 'idle',
+    status: 'loading',
     release: null,
     error: '',
   })
@@ -575,7 +576,6 @@ function App() {
 
   useEffect(() => {
     let cancelled = false
-    setReleaseState({ status: 'loading', release: null, error: '' })
 
     fetch(releaseApiUrl)
       .then(async (response) => {
