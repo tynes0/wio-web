@@ -3,6 +3,7 @@ export const repoName = 'wio'
 export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
+export const documentedWioVersion = '0.13.0'
 
 export const docsCatalog = [
   {
@@ -34,6 +35,13 @@ export const docsCatalog = [
     sourcePath: 'docs/WIO_LANGUAGE_DRAFT.md',
   },
   {
+    id: 'language-spec-0-13',
+    title: 'Language Specification 0.13',
+    category: 'Language',
+    description: 'Normative Unicode text, const-generic, attribute, extension, matching, and fixed-array rules for Wio 0.13.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_13.md',
+  },
+  {
     id: 'std',
     title: 'Standard Library',
     category: 'Language',
@@ -46,6 +54,13 @@ export const docsCatalog = [
     category: 'Tooling',
     description: 'How makewio, project commands, packaging, and generated artifact policy fit together.',
     sourcePath: 'docs/WIO_PROJECT_SYSTEM.md',
+  },
+  {
+    id: 'editor-ecosystem',
+    title: 'Editor Ecosystem Plan',
+    category: 'Tooling',
+    description: 'Shared compiler-service and release plan for VS Code, Visual Studio, Rider, and CLion.',
+    sourcePath: 'docs/WIO_EDITOR_ECOSYSTEM_PLAN.md',
   },
   {
     id: 'interop',
