@@ -33,7 +33,14 @@ for (const doc of docsCatalog) {
   ids.add(doc.id)
 }
 
-for (const requiredId of ['language-spec-0-13', 'editor-ecosystem', 'v1-release-plan', 'post-v1-roadmap']) {
+for (const requiredId of [
+  'language-spec-0-13',
+  'sdk-parity-0-14',
+  'release-notes-0-14',
+  'editor-ecosystem',
+  'v1-release-plan',
+  'post-v1-roadmap',
+]) {
   if (!ids.has(requiredId)) throw new Error(`Required documentation entry is missing: ${requiredId}`)
 }
 
