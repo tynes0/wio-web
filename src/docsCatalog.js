@@ -3,7 +3,7 @@ export const repoName = 'wio'
 export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.13.0'
+export const documentedWioVersion = '0.14.0'
 
 export const docsCatalog = [
   {
@@ -77,6 +77,13 @@ export const docsCatalog = [
     sourcePath: 'docs/WIO_SDK.md',
   },
   {
+    id: 'sdk-parity-0-14',
+    title: 'SDK 0.14 Parity Matrix',
+    category: 'Interop',
+    description: 'Normative support inventory for nested values, typed dynamic fields, ABI v8, and const generics.',
+    sourcePath: 'docs/WIO_SDK_0_14_PARITY_MATRIX.md',
+  },
+  {
     id: 'runtime',
     title: 'Runtime Type Model',
     category: 'Interop',
@@ -145,6 +152,13 @@ export const docsCatalog = [
     category: 'Release',
     description: 'Mapping between feature work, tests, docs, and closure state.',
     sourcePath: 'docs/WIO_TRACEABILITY.md',
+  },
+  {
+    id: 'release-notes-0-14',
+    title: 'Wio 0.14 Release Notes',
+    category: 'Release',
+    description: 'SDK value parity, Unicode/JSON/regex correctness, and cross-platform conformance changes.',
+    sourcePath: 'docs/WIO_0_14_RELEASE_NOTES.md',
   },
 ]
 
