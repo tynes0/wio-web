@@ -21,23 +21,33 @@ const quickCommands = [
 
 const featureCards = [
   {
-    title: 'Tooling that stays close to the language',
-    text: 'Build, test, package, performance smoke, environment setup, and binding generation all live under the same CLI instead of separate helper ecosystems.',
+    label: '01 · Language',
+    title: 'Learn one coherent model',
+    text: 'Objects, stack components, extensions, generics, async work, reflection, and native boundaries are taught as parts of the same language.',
   },
   {
-    title: 'Interop is a first-class citizen',
-    text: 'Bindings, exported modules, SDK-side objects, runtime categories, and ABI notes are documented as one story instead of a late extra.',
+    label: '02 · Tooling',
+    title: 'Go from file to project',
+    text: 'Start with one source file, then grow into projects, tests, packages, bindings, and environment diagnostics without changing tools.',
   },
   {
-    title: 'The docs stay tied to the repo',
-    text: 'The website reads canonical markdown from the main Wio repository so the docs you ship and the docs you browse stay aligned.',
+    label: '03 · Native',
+    title: 'Cross the boundary deliberately',
+    text: 'Follow practical C++ interop and SDK guides that explain ownership, ABI types, exported modules, and host integration together.',
   },
+]
+
+const learningTracks = [
+  { number: '01', title: 'First program', text: 'Install Wio and run a single source file.', href: '#getting-started' },
+  { number: '02', title: 'Language basics', text: 'Types, control flow, objects, and components.', href: navHref('docs', 'language') },
+  { number: '03', title: 'Build a project', text: 'Manifests, native sources, tests, and packages.', href: navHref('docs', 'project-system') },
+  { number: '04', title: 'Native interop', text: 'Bind C++ and expose Wio modules to a host.', href: navHref('docs', 'interop') },
 ]
 
 const homeCode = `use std::console as console;
 
 fn Entry() -> i32 {
-    console::PrintLine!("Hello from Wio");
+    console::PrintLine("Hello from Wio");
     return 0;
 }`
 
@@ -93,13 +103,77 @@ function detectPlatform() {
 
 function scoreAssetForPlatform(assetName, platform) {
   const lower = assetName.toLowerCase()
+
   switch (platform) {
     case 'windows':
-      return /windows|win(32|64)?/.test(lower) ? 2 : /linux|mac|darwin|osx/.test(lower) ? -1 : 0
+      return /windows|win(32|64)?/.test(lower)
+        ? 2
+        : /linux|mac|darwin|osx/.test(lower)
+          ? -1
+          : 0
+
     case 'macos':
-      return /mac|darwin|osx/.test(lower) ? 2 : /windows|linux/.test(lower) ? -1 : 0
+      return /mac|darwin|osx/.test(lower)
+        ? 2
+        : /windows|linux/.test(lower)
+          ? -1
+          : 0
+
     case 'linux':
-      return /linux/.test(lower) ? 2 : /windows|mac|darwin|osx/.test(lower) ? -1 : 0
+      return /linux/.test(lower)
+        ? 2
+        : /windows|mac|darwin|osx/.test(lower)
+          ? -1
+          : 0
+
+    default:
+      return 0
+  }
+}
+
+function scoreAssetKindForPlatform(assetName, platform) {
+  const lower = assetName.toLowerCase()
+
+  if (
+    /release[_-]?notes/.test(lower) ||
+    /sha\d*sums/.test(lower) ||
+    /checksum/.test(lower) ||
+    lower.endsWith('.md') ||
+    lower.endsWith('.txt') ||
+    lower.endsWith('.asc') ||
+    lower.endsWith('.sig')
+  ) {
+    return -100
+  }
+
+  switch (platform) {
+    case 'windows':
+      if (/setup.*\.exe$/.test(lower)) return 100
+      if (/installer.*\.exe$/.test(lower)) return 95
+
+      if (lower.endsWith('.exe')) return 80
+      if (lower.endsWith('.msi')) return 75
+
+      if (lower.endsWith('.ps1')) return 60
+
+      if (lower.endsWith('.zip')) return 40
+
+      return 0
+
+    case 'macos':
+      if (lower.endsWith('.dmg')) return 100
+      if (lower.endsWith('.pkg')) return 95
+      if (lower.endsWith('.zip')) return 60
+      return 0
+
+    case 'linux':
+      if (lower.endsWith('.appimage')) return 100
+      if (lower.endsWith('.deb')) return 90
+      if (lower.endsWith('.rpm')) return 85
+      if (lower.endsWith('.tar.gz') || lower.endsWith('.tgz')) return 60
+      if (lower.endsWith('.zip')) return 40
+      return 0
+
     default:
       return 0
   }
@@ -111,10 +185,18 @@ function pickRecommendedAsset(assets, platform) {
   }
 
   const ranked = [...assets].sort((left, right) => {
-    const leftScore = scoreAssetForPlatform(left.name, platform)
-    const rightScore = scoreAssetForPlatform(right.name, platform)
-    if (leftScore !== rightScore) {
-      return rightScore - leftScore
+    const leftPlatformScore = scoreAssetForPlatform(left.name, platform)
+    const rightPlatformScore = scoreAssetForPlatform(right.name, platform)
+
+    if (leftPlatformScore !== rightPlatformScore) {
+      return rightPlatformScore - leftPlatformScore
+    }
+
+    const leftKindScore = scoreAssetKindForPlatform(left.name, platform)
+    const rightKindScore = scoreAssetKindForPlatform(right.name, platform)
+
+    if (leftKindScore !== rightKindScore) {
+      return rightKindScore - leftKindScore
     }
 
     if (left.size !== right.size) {
@@ -199,22 +281,22 @@ function TopNav({ page }) {
         <span className="brandmark-mark">W</span>
         <span className="brandmark-copy">
           <strong>Wio</strong>
-          <small>docs + downloads</small>
+          <small>Learn · Build · Ship</small>
         </span>
       </a>
 
       <nav className="topnav-links" aria-label="Primary">
         <a className={page === 'home' ? 'nav-link active' : 'nav-link'} href="#home">
-          Home
+          Overview
         </a>
         <a className={page === 'download' ? 'nav-link active' : 'nav-link'} href="#download">
           Download
         </a>
         <a className={page === 'getting-started' ? 'nav-link active' : 'nav-link'} href="#getting-started">
-          Getting Started
+          Learn
         </a>
         <a className={page === 'docs' ? 'nav-link active' : 'nav-link'} href={navHref('docs')}>
-          Docs
+          Reference
         </a>
       </nav>
     </header>
@@ -288,64 +370,78 @@ function ReleaseCard({ releaseState, platform, recommendedAsset }) {
 function HomePage({ releaseState, platform, recommendedAsset }) {
   return (
     <div className="page-view home-view">
-      <section className="home-grid">
-        <div className="hero-card surface-card">
-          <p className="eyebrow">Native-first language</p>
-          <h1>Wio docs, downloads, and install help.</h1>
+      <section className="hero-section">
+        <div className="hero-copy">
+          <p className="eyebrow">A native-first programming language</p>
+          <h1>Learn Wio.<br /><span>Build without layers.</span></h1>
           <p className="hero-text">
-            Wio is a language and tooling stack aimed at modules, tools, games, runtime bridges, and native-first workflows.
-            The site stays close to the real repository so shipping docs and browsing docs do not drift apart.
+            A practical learning home for Wio—from your first file to native libraries,
+            exported modules, async systems, and production projects.
           </p>
           <div className="hero-actions">
-            <a className="primary-button" href="#download">
-              Download Wio
-            </a>
-            <a className="secondary-button" href="#getting-started">
-              Getting started
+            <a className="primary-button" href="#getting-started">
+              Start learning <span aria-hidden="true">→</span>
             </a>
             <a className="secondary-button" href={navHref('docs')}>
-              Browse docs
+              Explore reference
             </a>
+          </div>
+          <div className="hero-proof" aria-label="Wio highlights">
+            <span>Compiled to C++20</span>
+            <span>Windows + Linux</span>
+            <span>First-class native interop</span>
           </div>
         </div>
 
-        <div className="code-card surface-card">
-          <p className="eyebrow">Tiny first file</p>
+        <div className="code-card">
+          <div className="code-window-head">
+            <span className="window-dots" aria-hidden="true"><i /><i /><i /></span>
+            <span>hello.wio</span>
+            <span className="code-status">ready</span>
+          </div>
           <pre>
             <code>{homeCode}</code>
           </pre>
-          <p className="fine-print">Compiled language, repo-aware tooling, and a CLI that already knows how to build, run, bind, package, and measure.</p>
+          <div className="terminal-line"><span>$</span> wio file run hello.wio</div>
+          <div className="terminal-output">Hello from Wio</div>
         </div>
       </section>
 
-      <section className="route-cards">
-        <a className="route-card surface-card" href="#download">
-          <p className="eyebrow">Step 1</p>
-          <h2>Download</h2>
-          <p>Get the latest release, pick the right asset for your platform, and set up <code>wio</code> on your PATH.</p>
-        </a>
-        <a className="route-card surface-card" href="#getting-started">
-          <p className="eyebrow">Step 2</p>
-          <h2>Getting Started</h2>
-          <p>Run a single file, create a project, and walk the normal first-day flow without digging through internals.</p>
-        </a>
-        <a className="route-card surface-card" href={navHref('docs')}>
-          <p className="eyebrow">Step 3</p>
-          <h2>Docs</h2>
-          <p>Open the language, std, interop, SDK, performance, troubleshooting, and release documents from one explorer.</p>
-        </a>
+      <section className="learning-section">
+        <div className="section-kicker">Guided path</div>
+        <div className="learning-heading">
+          <h2>From zero to native application.</h2>
+          <p>Follow the path in order, or jump directly to the topic you need.</p>
+        </div>
+        <div className="learning-grid">
+          {learningTracks.map((track) => (
+            <a className="learning-card" href={track.href} key={track.number}>
+              <span>{track.number}</span>
+              <h3>{track.title}</h3>
+              <p>{track.text}</p>
+              <i aria-hidden="true">↗</i>
+            </a>
+          ))}
+        </div>
       </section>
 
       <section className="feature-grid">
         {featureCards.map((card) => (
-          <article className="feature-card surface-card" key={card.title}>
+          <article className="feature-card" key={card.title}>
+            <p className="eyebrow">{card.label}</p>
             <h3>{card.title}</h3>
             <p>{card.text}</p>
           </article>
         ))}
       </section>
 
-      <section className="mini-release-grid">
+      <section className="release-section">
+        <div className="release-intro">
+          <p className="eyebrow">Ready to begin?</p>
+          <h2>Install the stable toolchain.</h2>
+          <p>Download the recommended package for your platform, then verify the environment with one command.</p>
+          <a className="text-link" href="#download">See installation details →</a>
+        </div>
         <ReleaseCard releaseState={releaseState} platform={platform} recommendedAsset={recommendedAsset} />
       </section>
     </div>
