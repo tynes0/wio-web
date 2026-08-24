@@ -5,18 +5,36 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
 }
 
-function formatInline(value) {
+function escapeAttribute(value) {
+  return escapeHtml(value).replaceAll('"', '&quot;').replaceAll("'", '&#39;')
+}
+
+function headingId(value) {
+  return value
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[`*_]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\u00c0-\u024f]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function formatInline(value, resolveLink) {
   let result = escapeHtml(value)
 
   result = result.replace(/`([^`]+)`/g, '<code>$1</code>')
   result = result.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
   result = result.replace(/\*([^*]+)\*/g, '<em>$1</em>')
-  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, target) => {
+    const resolved = resolveLink ? resolveLink(target) : { href: target, external: true }
+    const external = resolved.external ? ' target="_blank" rel="noreferrer"' : ''
+    return `<a href="${escapeAttribute(resolved.href)}"${external}>${label}</a>`
+  })
 
   return result
 }
 
-export function renderMarkdown(markdown) {
+export function renderMarkdown(markdown, options = {}) {
   if (!markdown) {
     return '<p>No documentation content was loaded.</p>'
   }
@@ -44,7 +62,7 @@ export function renderMarkdown(markdown) {
 
     const text = paragraph.join(' ').trim()
     if (text.length > 0) {
-      html.push(`<p>${formatInline(text)}</p>`)
+      html.push(`<p>${formatInline(text, options.resolveLink)}</p>`)
     }
     paragraph = []
   }
@@ -55,7 +73,7 @@ export function renderMarkdown(markdown) {
     }
 
     const tag = listType === 'ordered' ? 'ol' : 'ul'
-    html.push(`<${tag}>${listItems.map((item) => `<li>${formatInline(item)}</li>`).join('')}</${tag}>`)
+    html.push(`<${tag}>${listItems.map((item) => `<li>${formatInline(item, options.resolveLink)}</li>`).join('')}</${tag}>`)
     listType = null
     listItems = []
   }
@@ -85,7 +103,8 @@ export function renderMarkdown(markdown) {
       flushParagraph()
       flushList()
       const level = headingMatch[1].length
-      html.push(`<h${level}>${formatInline(headingMatch[2].trim())}</h${level}>`)
+      const heading = headingMatch[2].trim()
+      html.push(`<h${level} id="${headingId(heading)}">${formatInline(heading, options.resolveLink)}</h${level}>`)
       continue
     }
 
@@ -122,7 +141,7 @@ export function renderMarkdown(markdown) {
     if (quoteMatch) {
       flushParagraph()
       flushList()
-      html.push(`<blockquote><p>${formatInline(quoteMatch[1])}</p></blockquote>`)
+      html.push(`<blockquote><p>${formatInline(quoteMatch[1], options.resolveLink)}</p></blockquote>`)
       continue
     }
 

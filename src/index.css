@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --canvas: #f7f7f3;
+  --canvas: #f4f6fa;
   --surface: #ffffff;
   --surface-soft: #f0f3ff;
-  --surface-warm: #fff5e9;
+  --surface-warm: #f1f4f9;
   --ink: #172033;
   --ink-soft: #3d485d;
   --muted: #6f7889;
@@ -15,8 +15,8 @@
   --accent-deep: #2344c9;
   --accent-soft: #e4eaff;
   --accent-ink: #ffffff;
-  --coral: #fa7158;
-  --lime: #d9ef76;
+  --coral: #5b7cff;
+  --lime: #dce5ff;
   --code-bg: #172033;
   --code-ink: #edf2ff;
   --shadow-soft: 0 16px 44px rgba(42, 52, 75, 0.08);
@@ -42,8 +42,11 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    linear-gradient(rgba(23, 32, 51, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 32, 51, 0.025) 1px, transparent 1px),
+    radial-gradient(circle at 8% 8%, rgba(190, 207, 255, 0.5), transparent 25rem),
+    radial-gradient(circle at 62% 0%, rgba(218, 225, 239, 0.62), transparent 28rem),
+    radial-gradient(circle at 96% 18%, rgba(196, 214, 255, 0.52), transparent 25rem),
+    linear-gradient(rgba(23, 32, 51, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 32, 51, 0.018) 1px, transparent 1px),
     var(--canvas);
   background-size: 32px 32px;
 }

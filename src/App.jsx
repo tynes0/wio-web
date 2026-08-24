@@ -6,6 +6,7 @@ import {
   getRawDocUrl,
   latestReleaseUrl,
   releaseApiUrl,
+  resolveDocumentationLink,
 } from './docsCatalog'
 import { renderMarkdown } from './markdown'
 
@@ -50,6 +51,110 @@ fn Entry() -> i32 {
     console::PrintLine("Hello from Wio");
     return 0;
 }`
+
+const howToGuides = [
+  {
+    step: '01',
+    category: 'Start here',
+    title: 'Run your first Wio file',
+    text: 'A complete executable is one file and one Entry function.',
+    command: 'wio file run hello.wio',
+    code: homeCode,
+  },
+  {
+    step: '02',
+    category: 'Data & methods',
+    title: 'Extend a stack component',
+    text: 'Keep data compact, then add view and ref behavior without turning it into a heap object.',
+    command: 'wio file run counter.wio',
+    code: `component Counter {
+    public value: i32;
+}
+
+extension CounterOps for Counter {
+    public view fn Read() -> i32 {
+        return self.value;
+    }
+
+    public ref fn Add(amount: i32) -> i32 {
+        self.value += amount;
+        return self.value;
+    }
+}`,
+  },
+  {
+    step: '03',
+    category: 'Async',
+    title: 'Await work without blocking the model',
+    text: 'Coroutines, sleeps, tasks, and object methods use the same readable async syntax.',
+    command: 'wio file run async_demo.wio',
+    code: `use std::async as futures;
+
+async fn Delayed(value: i32) -> i32 {
+    await futures::Sleep(250u64);
+    return value;
+}
+
+async fn Entry() -> i32 {
+    let answer = await Delayed(42);
+    return answer == 42 ? 0 : 1;
+}`,
+  },
+  {
+    step: '04',
+    category: 'Correctness',
+    title: 'Return errors as values',
+    text: 'Use Result when failure carries information and Option when a value may simply be absent.',
+    command: 'wio file run parse_port.wio',
+    code: `use std::convert as convert;
+
+fn ReadPort(value: string) -> std::Result<i32> {
+    return convert::ParseI32(value);
+}
+
+fn Entry() -> i32 {
+    let port = ReadPort("8080");
+    return port.IsOk() ? 0 : 1;
+}`,
+  },
+  {
+    step: '05',
+    category: 'Standard library',
+    title: 'Parse and query JSON',
+    text: 'Parse, inspect, merge, and write deterministic JSON through a practical value API.',
+    command: 'wio file run config.wio',
+    code: `use std::json as json;
+
+fn Entry() -> i32 {
+    let root = json::Parse!("{\\"port\\":8080}");
+    let port = json::Pointer(root, "/port");
+
+    if (port.IsSome()) {
+        return 0;
+    }
+    return 1;
+}`,
+  },
+  {
+    step: '06',
+    category: 'Native interop',
+    title: 'Make a C++ POD feel native to Wio',
+    text: 'Map the C++ layout once, then expose safe view/ref methods through an extension.',
+    command: 'wio project run',
+    code: `using cpp::header("math_api.h");
+
+[Native, CppName("Vec2")]
+component Vector2 {
+    public x: f32;
+    public y: f32;
+}
+
+extension Vector2Math for Vector2 {
+    [Native, CppName("math_api::Length")]
+    public view fn Length() -> f32;
+}`,
+  },
+]
 
 function formatDate(value) {
   if (!value) {
@@ -211,24 +316,27 @@ function pickRecommendedAsset(assets, platform) {
 
 function readRoute() {
   if (typeof window === 'undefined') {
-    return { page: 'home', docId: defaultDocId }
+    return { page: 'home', docId: defaultDocId, anchor: '' }
   }
 
   const hash = window.location.hash.replace(/^#/, '')
   if (!hash) {
-    return { page: 'home', docId: defaultDocId }
+    return { page: 'home', docId: defaultDocId, anchor: '' }
   }
   if (hash.startsWith('docs/')) {
-    return { page: 'docs', docId: hash.slice('docs/'.length) || defaultDocId }
+    return { page: 'docs', docId: hash.slice('docs/'.length) || defaultDocId, anchor: '' }
   }
   if (hash === 'docs') {
-    return { page: 'docs', docId: defaultDocId }
+    return { page: 'docs', docId: defaultDocId, anchor: '' }
+  }
+  if (hash === 'how-to') {
+    return { page: 'home', docId: defaultDocId, anchor: 'how-to' }
   }
   if (hash === 'download' || hash === 'getting-started' || hash === 'home') {
-    return { page: hash, docId: defaultDocId }
+    return { page: hash, docId: defaultDocId, anchor: '' }
   }
 
-  return { page: 'home', docId: defaultDocId }
+  return { page: 'home', docId: defaultDocId, anchor: '' }
 }
 
 function navHref(page, docId = defaultDocId) {
@@ -295,11 +403,49 @@ function TopNav({ page }) {
         <a className={page === 'getting-started' ? 'nav-link active' : 'nav-link'} href="#getting-started">
           Learn
         </a>
+        <a className="nav-link" href="#how-to">
+          How to
+        </a>
         <a className={page === 'docs' ? 'nav-link active' : 'nav-link'} href={navHref('docs')}>
           Reference
         </a>
       </nav>
     </header>
+  )
+}
+
+function HowToCard({ guide }) {
+  const [copied, setCopied] = useState(false)
+
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(guide.code)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1400)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <article className="howto-card">
+      <div className="howto-copy">
+        <div className="howto-meta">
+          <span>{guide.step}</span>
+          <p>{guide.category}</p>
+        </div>
+        <h3>{guide.title}</h3>
+        <p>{guide.text}</p>
+        <code className="howto-command">$ {guide.command}</code>
+      </div>
+      <div className="mini-code-window">
+        <div className="mini-code-head">
+          <span>example.wio</span>
+          <button type="button" onClick={copyCode}>{copied ? 'Copied' : 'Copy'}</button>
+        </div>
+        <pre><code>{guide.code}</code></pre>
+      </div>
+    </article>
   )
 }
 
@@ -372,11 +518,12 @@ function HomePage({ releaseState, platform, recommendedAsset }) {
     <div className="page-view home-view">
       <section className="hero-section">
         <div className="hero-copy">
+          <div className="hero-edition"><span>Wio learning home</span><i>v0.15 path</i></div>
           <p className="eyebrow">A native-first programming language</p>
-          <h1>Learn Wio.<br /><span>Build without layers.</span></h1>
+          <h1>Code that stays<br /><span>close to you.</span></h1>
           <p className="hero-text">
-            A practical learning home for Wio—from your first file to native libraries,
-            exported modules, async systems, and production projects.
+            Learn the language by building: begin with Hello World, grow into typed data,
+            async systems, native C++ libraries, and real desktop applications.
           </p>
           <div className="hero-actions">
             <a className="primary-button" href="#getting-started">
@@ -393,7 +540,12 @@ function HomePage({ releaseState, platform, recommendedAsset }) {
           </div>
         </div>
 
-        <div className="code-card">
+        <div className="hero-code-stage">
+          <span className="orbit orbit-one" aria-hidden="true" />
+          <span className="orbit orbit-two" aria-hidden="true" />
+          <span className="spark spark-one" aria-hidden="true">✦</span>
+          <span className="spark spark-two" aria-hidden="true">+</span>
+          <div className="code-card">
           <div className="code-window-head">
             <span className="window-dots" aria-hidden="true"><i /><i /><i /></span>
             <span>hello.wio</span>
@@ -404,6 +556,8 @@ function HomePage({ releaseState, platform, recommendedAsset }) {
           </pre>
           <div className="terminal-line"><span>$</span> wio file run hello.wio</div>
           <div className="terminal-output">Hello from Wio</div>
+          </div>
+          <div className="hero-code-note"><strong>01</strong><span>Your first program<br />in five lines</span></div>
         </div>
       </section>
 
@@ -422,6 +576,26 @@ function HomePage({ releaseState, platform, recommendedAsset }) {
               <i aria-hidden="true">↗</i>
             </a>
           ))}
+        </div>
+      </section>
+
+      <section className="howto-section" id="how-to">
+        <div className="howto-heading">
+          <div>
+            <p className="eyebrow">Learn by doing</p>
+            <h2>How do I…?</h2>
+          </div>
+          <p>
+            Short, complete recipes for the things you reach for first. Copy one,
+            run it, then follow the linked reference when you want the deeper model.
+          </p>
+        </div>
+        <div className="howto-grid">
+          {howToGuides.map((guide) => <HowToCard guide={guide} key={guide.step} />)}
+        </div>
+        <div className="howto-footer">
+          <span>Need the full model?</span>
+          <a href={navHref('docs')}>Browse every language and std guide →</a>
         </div>
       </section>
 
@@ -485,7 +659,11 @@ function DownloadPage({ releaseState, platform, recommendedAsset }) {
 }
 
 function GettingStartedPage({ guideState }) {
-  const renderedGuide = guideState.status === 'ready' ? renderMarkdown(guideState.content) : ''
+  const renderedGuide = guideState.status === 'ready'
+    ? renderMarkdown(guideState.content, {
+      resolveLink: (target) => resolveDocumentationLink(guideState.sourcePath, target),
+    })
+    : ''
 
   return (
     <div className="page-view getting-started-view">
@@ -535,7 +713,11 @@ function DocsPage({
   docState,
 }) {
   const docScrollRef = useRef(null)
-  const renderedDocHtml = docState.status === 'ready' ? renderMarkdown(docState.content) : ''
+  const renderedDocHtml = docState.status === 'ready'
+    ? renderMarkdown(docState.content, {
+      resolveLink: (target) => resolveDocumentationLink(selectedDoc.sourcePath, target),
+    })
+    : ''
 
   useEffect(() => {
     docScrollRef.current?.scrollTo({ top: 0, behavior: 'auto' })
@@ -667,8 +849,14 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (route.anchor) {
+      window.requestAnimationFrame(() => {
+        document.getElementById(route.anchor)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+      return
+    }
     window.scrollTo({ top: 0, behavior: 'auto' })
-  }, [route.page])
+  }, [route.page, route.anchor])
 
   useEffect(() => {
     let cancelled = false
@@ -715,7 +903,7 @@ function App() {
   }
 
   return (
-    <div className="page-shell">
+    <div className={`page-shell page-${route.page}`}>
       <TopNav page={route.page} />
 
       {route.page === 'home' && (
