@@ -154,6 +154,198 @@ extension Vector2Math for Vector2 {
     public view fn Length() -> f32;
 }`,
   },
+  {
+    step: '07',
+    category: 'Objects',
+    title: 'Create an owned object with methods',
+    text: 'Use objects for identity-bearing state that lives through references and owns behavior directly.',
+    command: 'wio file run worker.wio',
+    code: `object Worker {
+    private base: i32;
+
+    OnConstruct(base: i32) {
+        self.base = base;
+    }
+
+    public fn Add(value: i32) -> i32 {
+        return self.base + value;
+    }
+}
+
+fn Entry() -> i32 {
+    let worker = Worker(10);
+    return worker.Add(5) == 15 ? 0 : 1;
+}`,
+  },
+  {
+    step: '08',
+    category: 'Generics',
+    title: 'Build a reusable generic object',
+    text: 'Keep one implementation while retaining concrete types through fields, constructors, and methods.',
+    command: 'wio file run generic_box.wio',
+    code: `object Box<T> {
+    public value: T;
+
+    OnConstruct(value: T) {
+        self.value = value;
+    }
+
+    public fn Get() -> T {
+        return self.value;
+    }
+}
+
+fn Entry() -> i32 {
+    let answer = Box<i32>(42);
+    return answer.Get() == 42 ? 0 : 1;
+}`,
+  },
+  {
+    step: '09',
+    category: 'Option',
+    title: 'Represent an absent value',
+    text: 'Option keeps normal absence separate from rich failures and removes sentinel values from APIs.',
+    command: 'wio file run option.wio',
+    code: `fn First(values: i32[]) -> std::Option<i32> {
+    if (values.Empty()) {
+        return std::None<i32>();
+    }
+    return std::Some<i32>(values[0usize]);
+}
+
+fn Entry() -> i32 {
+    let value = First([7, 8, 9]);
+    return value.ValueOr(0) == 7 ? 0 : 1;
+}`,
+  },
+  {
+    step: '10',
+    category: 'Text processing',
+    title: 'Match and replace with regex',
+    text: 'Regex operations return checked values so invalid patterns never become hidden runtime surprises.',
+    command: 'wio file run regex.wio',
+    code: `use std::regex as regex;
+
+fn Entry() -> i32 {
+    let pattern = regex::Regex("([a-z]+)-(\\d+)", true);
+    let found = pattern.Find("release Wio-2026 ready");
+    let masked = regex::Replace("build-2026", "\\d+", "#");
+
+    if (found.IsError() or masked.IsError()) {
+        return 1;
+    }
+    return found.Value().found ? 0 : 1;
+}`,
+  },
+  {
+    step: '11',
+    category: 'Filesystem',
+    title: 'Read and write a text file safely',
+    text: 'Filesystem APIs expose structured Result errors and provide explicit convenience unwraps when desired.',
+    command: 'wio file run notes.wio',
+    code: `use std::fs as fs;
+use std::path as path;
+
+fn Entry() -> i32 {
+    let file = path::Join(fs::CurrentPath!(), "note.txt");
+    let written = fs::WriteText(file, "Hello from Wio");
+    if (written.IsError()) {
+        return 1;
+    }
+
+    let text = fs::ReadText(file);
+    return text.IsOk() and text.Value() == "Hello from Wio" ? 0 : 1;
+}`,
+  },
+  {
+    step: '12',
+    category: 'Utilities',
+    title: 'Hash data and generate repeatable random values',
+    text: 'FNV-1a is the default hash, SHA-256 is available, and seeded generators are deterministic.',
+    command: 'wio file run utilities.wio',
+    code: `use std::hash as hash;
+use std::random as random;
+
+fn Entry() -> i32 {
+    let stableId = hash::Hash("hello");
+    let sha = hash::Sha256("hello");
+    let generator = random::Mt19937(42u64);
+    let roll = generator.NextI32(1, 7);
+
+    return stableId != 0u64 and not sha.Empty()
+        and roll >= 1 and roll < 7 ? 0 : 1;
+}`,
+  },
+]
+
+const exampleProjectFiles = [
+  {
+    path: 'wio.makewio',
+    code: `schemaVersion = 1
+name = "FocusBoard"
+template = "wio-app"
+
+[toolchain]
+buildDir = "build"
+config = "Debug"
+
+[wio]
+entry = "wio/main.wio"
+target = "exe"
+sourceRoots = ["wio"]
+
+[build]
+buildDir = ".wio-build"
+config = "Debug"
+
+[run]
+args = []
+workingDirectory = "."`,
+  },
+  {
+    path: 'wio/model.wio',
+    code: `realm focus {
+    component Task {
+        public title: string;
+        public done: bool;
+    }
+
+    extension TaskView for Task {
+        public view fn Status() -> string {
+            return self.done ? "[x]" : "[ ]";
+        }
+    }
+
+    fn Seed() -> Task[] {
+        return [
+            Task("Read the language guide", true),
+            Task("Build a native bridge", false),
+            Task("Ship the first project", false)
+        ];
+    }
+}`,
+  },
+  {
+    path: 'wio/main.wio',
+    code: `use model;
+use std::console as console;
+
+fn Entry() -> i32 {
+    let tasks = focus::Seed();
+    mut completed = 0usize;
+
+    console::PrintLine!("Focus Board");
+    console::PrintLine!("-----------");
+    for (task in tasks) {
+        console::PrintLine!(task.Status() + " " + task.title);
+        if (task.done) { completed += 1usize; }
+    }
+
+    console::PrintLine!("-----------");
+    console::PrintLine!($"Completed: \${completed}");
+    return 0;
+}`,
+  },
 ]
 
 function formatDate(value) {
@@ -329,10 +521,7 @@ function readRoute() {
   if (hash === 'docs') {
     return { page: 'docs', docId: defaultDocId, anchor: '' }
   }
-  if (hash === 'how-to') {
-    return { page: 'home', docId: defaultDocId, anchor: 'how-to' }
-  }
-  if (hash === 'download' || hash === 'getting-started' || hash === 'home') {
+  if (hash === 'download' || hash === 'getting-started' || hash === 'examples' || hash === 'home') {
     return { page: hash, docId: defaultDocId, anchor: '' }
   }
 
@@ -403,8 +592,8 @@ function TopNav({ page }) {
         <a className={page === 'getting-started' ? 'nav-link active' : 'nav-link'} href="#getting-started">
           Learn
         </a>
-        <a className="nav-link" href="#how-to">
-          How to
+        <a className={page === 'examples' ? 'nav-link active' : 'nav-link'} href="#examples">
+          Examples
         </a>
         <a className={page === 'docs' ? 'nav-link active' : 'nav-link'} href={navHref('docs')}>
           Reference
@@ -440,12 +629,118 @@ function HowToCard({ guide }) {
       </div>
       <div className="mini-code-window">
         <div className="mini-code-head">
-          <span>example.wio</span>
+          <span>{guide.filename ?? 'example.wio'}</span>
           <button type="button" onClick={copyCode}>{copied ? 'Copied' : 'Copy'}</button>
         </div>
         <pre><code>{guide.code}</code></pre>
       </div>
     </article>
+  )
+}
+
+function ProjectExample() {
+  const [selectedPath, setSelectedPath] = useState(exampleProjectFiles[0].path)
+  const [copied, setCopied] = useState(false)
+  const selectedFile = exampleProjectFiles.find((file) => file.path === selectedPath) ?? exampleProjectFiles[0]
+
+  const copyFile = async () => {
+    try {
+      await navigator.clipboard.writeText(selectedFile.code)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1400)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <section className="project-example">
+      <div className="project-intro">
+        <p className="eyebrow">Complete project</p>
+        <h2>Build Focus Board.</h2>
+        <p>
+          A small multi-file CLI application with a real manifest, a stack component,
+          an extension, shared realm code, iteration, and formatted output.
+        </p>
+        <div className="project-runbook">
+          <span>01</span><code>wio project describe</code>
+          <span>02</span><code>wio project run</code>
+        </div>
+        <div className="project-output">
+          <p>Expected output</p>
+          <pre>{`Focus Board
+-----------
+[x] Read the language guide
+[ ] Build a native bridge
+[ ] Ship the first project
+-----------
+Completed: 1`}</pre>
+        </div>
+      </div>
+
+      <div className="project-workbench">
+        <aside className="project-tree" aria-label="Example project files">
+          <div className="project-tree-head">focus-board/</div>
+          {exampleProjectFiles.map((file) => (
+            <button
+              className={file.path === selectedFile.path ? 'active' : ''}
+              key={file.path}
+              onClick={() => setSelectedPath(file.path)}
+              type="button"
+            >
+              {file.path}
+            </button>
+          ))}
+        </aside>
+        <div className="project-editor">
+          <div className="project-editor-head">
+            <span>{selectedFile.path}</span>
+            <button type="button" onClick={copyFile}>{copied ? 'Copied' : 'Copy file'}</button>
+          </div>
+          <pre><code>{selectedFile.code}</code></pre>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function ExamplesPage() {
+  return (
+    <div className="page-view examples-view">
+      <section className="examples-head">
+        <div>
+          <p className="eyebrow">Wio cookbook</p>
+          <h1>Learn one useful thing at a time.</h1>
+        </div>
+        <p>
+          Twelve focused recipes and one complete project. Every example is deliberately
+          small enough to copy, run, change, and understand in a few minutes.
+        </p>
+      </section>
+
+      <section className="howto-section examples-cookbook">
+        <div className="howto-heading">
+          <div>
+            <p className="eyebrow">Quick recipes</p>
+            <h2>How do I…?</h2>
+          </div>
+          <p>Start with a task, copy the complete snippet, and follow its command.</p>
+        </div>
+        <div className="howto-grid">
+          {howToGuides.map((guide) => <HowToCard guide={guide} key={guide.step} />)}
+        </div>
+      </section>
+
+      <ProjectExample />
+
+      <section className="examples-next">
+        <div>
+          <p className="eyebrow">Go deeper</p>
+          <h2>Understand the model behind the recipe.</h2>
+        </div>
+        <a className="primary-button" href={navHref('docs')}>Open the full reference →</a>
+      </section>
+    </div>
   )
 }
 
@@ -576,26 +871,6 @@ function HomePage({ releaseState, platform, recommendedAsset }) {
               <i aria-hidden="true">↗</i>
             </a>
           ))}
-        </div>
-      </section>
-
-      <section className="howto-section" id="how-to">
-        <div className="howto-heading">
-          <div>
-            <p className="eyebrow">Learn by doing</p>
-            <h2>How do I…?</h2>
-          </div>
-          <p>
-            Short, complete recipes for the things you reach for first. Copy one,
-            run it, then follow the linked reference when you want the deeper model.
-          </p>
-        </div>
-        <div className="howto-grid">
-          {howToGuides.map((guide) => <HowToCard guide={guide} key={guide.step} />)}
-        </div>
-        <div className="howto-footer">
-          <span>Need the full model?</span>
-          <a href={navHref('docs')}>Browse every language and std guide →</a>
         </div>
       </section>
 
@@ -913,6 +1188,7 @@ function App() {
         <DownloadPage releaseState={releaseState} platform={platform} recommendedAsset={recommendedAsset} />
       )}
       {route.page === 'getting-started' && <GettingStartedPage guideState={guideState} />}
+      {route.page === 'examples' && <ExamplesPage />}
       {route.page === 'docs' && (
         <DocsPage
           docsByCategoryFiltered={filteredGroups}
