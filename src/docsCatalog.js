@@ -2,6 +2,7 @@ export const repoOwner = 'tynes0'
 export const repoName = 'wio'
 export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
+export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
 export const documentedWioVersion = '0.14.0'
 

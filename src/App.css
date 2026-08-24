@@ -675,6 +675,69 @@
   align-items: start;
 }
 
+.release-archive {
+  margin-top: 22px;
+  padding: clamp(24px, 4vw, 42px);
+  border-radius: 5px;
+}
+
+.release-archive-head {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.55fr);
+  gap: 40px;
+  align-items: end;
+  padding-bottom: 24px;
+}
+
+.release-archive-head h2 { margin-top: 10px; }
+.release-archive-head > p { color: var(--muted-strong); }
+.release-archive-status { padding: 24px 0; border-top: 1px solid var(--line); }
+
+.release-history-list { border-top: 1px solid var(--line); }
+
+.release-history-item {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.65fr) minmax(300px, 1fr);
+  gap: 22px 40px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.release-history-title { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.release-history-title h3 { font-size: 1.25rem; }
+
+.release-kind {
+  padding: 4px 7px;
+  border: 1px solid #cbd5e1;
+  border-radius: 2px;
+  color: var(--muted-strong);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.release-history-actions { display: flex; gap: 18px; align-items: center; justify-content: flex-end; }
+
+.archive-download {
+  display: grid;
+  gap: 3px;
+  min-width: min(100%, 290px);
+  padding: 11px 14px;
+  border: 1px solid #b9c9ff;
+  border-radius: 3px;
+  background: var(--surface-soft);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.archive-download span { color: var(--accent); font-size: 0.82rem; font-weight: 800; }
+.archive-download small { overflow: hidden; color: var(--muted); font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
+
+.archive-assets { grid-column: 1 / -1; }
+.archive-assets summary { width: fit-content; color: var(--muted-strong); cursor: pointer; font-size: 0.8rem; font-weight: 700; }
+.archive-asset-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
 .plain-list { display: grid; gap: 11px; }
 .plain-list li { position: relative; padding-left: 18px; }
 .plain-list li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--coral); }
@@ -840,6 +903,11 @@
   .feature-card + .feature-card { border-top: 1px solid var(--line); border-left: 0; }
   .feature-card { padding: 28px 12px; }
   .release-section { gap: 24px; }
+  .release-archive { padding: 22px 18px; }
+  .release-archive-head, .release-history-item { grid-template-columns: 1fr; gap: 16px; }
+  .release-history-actions { align-items: stretch; flex-direction: column; }
+  .archive-download { width: 100%; }
+  .archive-asset-list { grid-template-columns: 1fr; }
   .release-card, .detail-card, .command-card, .guide-card, .docs-sidebar, .doc-panel { padding: 19px; border-radius: 4px; }
   .docs-view { min-height: auto; }
   .docs-shell { grid-template-columns: 1fr; grid-template-rows: minmax(0, 56vh) minmax(0, 38vh); height: calc(100vh - 190px); }

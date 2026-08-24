@@ -6,6 +6,7 @@ import {
   getRawDocUrl,
   latestReleaseUrl,
   releaseApiUrl,
+  releasesApiUrl,
   resolveDocumentationLink,
 } from './docsCatalog'
 import { renderMarkdown } from './markdown'
@@ -808,6 +809,96 @@ function ReleaseCard({ releaseState, platform, recommendedAsset }) {
   )
 }
 
+function ReleaseArchive({ releaseHistoryState, platform, latestTag }) {
+  const previousReleases = releaseHistoryState.releases.filter(
+    (release) => release.tag_name !== latestTag,
+  )
+
+  return (
+    <section className="release-archive surface-card">
+      <div className="release-archive-head">
+        <div>
+          <p className="eyebrow">Release archive</p>
+          <h2>Previous Wio releases</h2>
+        </div>
+        <p>Need to reproduce an older build? Every published release remains available here.</p>
+      </div>
+
+      {releaseHistoryState.status === 'loading' && (
+        <p className="muted release-archive-status">Loading the complete release history from GitHub...</p>
+      )}
+      {releaseHistoryState.status === 'error' && (
+        <div className="release-archive-status stack gap-sm">
+          <p className="muted">The release archive could not be loaded automatically.</p>
+          <p className="fine-print">{releaseHistoryState.error}</p>
+          <a className="text-link" href={latestReleaseUrl} target="_blank" rel="noreferrer">
+            Browse all releases on GitHub
+          </a>
+        </div>
+      )}
+      {releaseHistoryState.status === 'empty' && (
+        <p className="muted release-archive-status">There are no earlier published releases yet.</p>
+      )}
+      {releaseHistoryState.status === 'ready' && previousReleases.length === 0 && (
+        <p className="muted release-archive-status">The recommended release is currently the only published build.</p>
+      )}
+      {releaseHistoryState.status === 'ready' && previousReleases.length > 0 && (
+        <div className="release-history-list">
+          {previousReleases.map((release) => {
+            const assets = release.assets ?? []
+            const platformAsset = pickRecommendedAsset(assets, platform)
+
+            return (
+              <article className="release-history-item" key={release.id ?? release.tag_name}>
+                <div className="release-history-copy">
+                  <div className="release-history-title">
+                    <h3>{release.name || release.tag_name}</h3>
+                    {release.prerelease && <span className="release-kind">Pre-release</span>}
+                  </div>
+                  <p className="fine-print">Published {formatDate(release.published_at)}</p>
+                </div>
+
+                <div className="release-history-actions">
+                  {platformAsset && (
+                    <a
+                      className="archive-download"
+                      href={platformAsset.browser_download_url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <span>Download for {platform}</span>
+                      <small>{platformAsset.name} · {formatBytes(platformAsset.size)}</small>
+                    </a>
+                  )}
+                  <a className="text-link" href={release.html_url} target="_blank" rel="noreferrer">
+                    Release notes →
+                  </a>
+                </div>
+
+                {assets.length > 0 && (
+                  <details className="archive-assets">
+                    <summary>Show all {assets.length} release {assets.length === 1 ? 'file' : 'files'}</summary>
+                    <ul className="asset-list archive-asset-list">
+                      {assets.map((asset) => (
+                        <li key={asset.id}>
+                          <a href={asset.browser_download_url} target="_blank" rel="noreferrer">
+                            <span>{asset.name}</span>
+                            <span>{formatBytes(asset.size)}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+              </article>
+            )
+          })}
+        </div>
+      )}
+    </section>
+  )
+}
+
 function HomePage({ releaseState, platform, recommendedAsset }) {
   return (
     <div className="page-view home-view">
@@ -897,7 +988,7 @@ function HomePage({ releaseState, platform, recommendedAsset }) {
   )
 }
 
-function DownloadPage({ releaseState, platform, recommendedAsset }) {
+function DownloadPage({ releaseState, releaseHistoryState, platform, recommendedAsset }) {
   return (
     <div className="page-view download-view">
       <section className="section-head">
@@ -929,6 +1020,12 @@ function DownloadPage({ releaseState, platform, recommendedAsset }) {
           </div>
         </div>
       </section>
+
+      <ReleaseArchive
+        releaseHistoryState={releaseHistoryState}
+        platform={platform}
+        latestTag={releaseState.release?.tag_name}
+      />
     </div>
   )
 }
@@ -1086,6 +1183,11 @@ function App() {
     release: null,
     error: '',
   })
+  const [releaseHistoryState, setReleaseHistoryState] = useState({
+    status: 'loading',
+    releases: [],
+    error: '',
+  })
 
   const flatDocs = useMemo(() => docsByCategory.flatMap((group) => group.items), [])
   const gettingStartedDoc = flatDocs.find((doc) => doc.id === 'getting-started') ?? flatDocs[0]
@@ -1121,6 +1223,39 @@ function App() {
 
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+
+    fetch(releasesApiUrl)
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`GitHub release archive lookup failed (${response.status})`)
+        }
+        return response.json()
+      })
+      .then((releases) => {
+        if (!cancelled) {
+          const publishedReleases = Array.isArray(releases)
+            ? releases.filter((release) => !release.draft)
+            : []
+          setReleaseHistoryState({
+            status: publishedReleases.length > 0 ? 'ready' : 'empty',
+            releases: publishedReleases,
+            error: '',
+          })
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setReleaseHistoryState({ status: 'error', releases: [], error: error.message })
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   useEffect(() => {
@@ -1185,7 +1320,12 @@ function App() {
         <HomePage releaseState={releaseState} platform={platform} recommendedAsset={recommendedAsset} />
       )}
       {route.page === 'download' && (
-        <DownloadPage releaseState={releaseState} platform={platform} recommendedAsset={recommendedAsset} />
+        <DownloadPage
+          releaseState={releaseState}
+          releaseHistoryState={releaseHistoryState}
+          platform={platform}
+          recommendedAsset={recommendedAsset}
+        />
       )}
       {route.page === 'getting-started' && <GettingStartedPage guideState={guideState} />}
       {route.page === 'examples' && <ExamplesPage />}
