@@ -1,115 +1,96 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --canvas: #08111f;
-  --surface: #1b2740;
-  --surface-deep: #121b2f;
-  --line: rgba(220, 234, 255, 0.10);
-  --line-strong: rgba(220, 234, 255, 0.18);
-  --ink: #eff6ff;
-  --ink-soft: #d7e6fb;
-  --muted: #a3b3cb;
-  --muted-strong: #85a7db;
-  --accent: #60a5fa;
-  --accent-deep: #3b82f6;
-  --accent-soft: #93c5fd;
-  --accent-ink: #08111f;
-  --code-bg: #0d1628;
-  --shadow-soft: 0 24px 56px rgba(2, 6, 23, 0.36);
-  --font-body: 'Instrument Sans', 'Segoe UI', sans-serif;
-  --font-heading: 'Space Grotesk', 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Cascadia Code', monospace;
+  --canvas: #f4f6fa;
+  --surface: #ffffff;
+  --surface-soft: #f0f3ff;
+  --surface-warm: #f1f4f9;
+  --ink: #172033;
+  --ink-soft: #3d485d;
+  --muted: #6f7889;
+  --muted-strong: #566178;
+  --line: #dfe3ea;
+  --line-strong: #cbd2dd;
+  --accent: #315bf4;
+  --accent-deep: #2344c9;
+  --accent-soft: #e4eaff;
+  --accent-ink: #ffffff;
+  --coral: #5b7cff;
+  --lime: #dce5ff;
+  --code-bg: #172033;
+  --code-ink: #edf2ff;
+  --shadow-soft: 0 16px 44px rgba(42, 52, 75, 0.08);
+  --shadow-float: 0 26px 70px rgba(30, 40, 65, 0.14);
+  --font-body: 'Manrope', 'Segoe UI', sans-serif;
+  --font-heading: 'Manrope', 'Segoe UI', sans-serif;
+  --font-mono: 'DM Mono', 'Cascadia Code', monospace;
 
   color: var(--ink-soft);
   background: var(--canvas);
-  font: 15px/1.62 var(--font-body);
+  font: 15px/1.65 var(--font-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(96, 165, 250, 0.13), transparent 24%),
-    linear-gradient(180deg, #091120, #0b1324 42%, #11192c 100%);
+    radial-gradient(circle at 8% 8%, rgba(190, 207, 255, 0.5), transparent 25rem),
+    radial-gradient(circle at 62% 0%, rgba(218, 225, 239, 0.62), transparent 28rem),
+    radial-gradient(circle at 96% 18%, rgba(196, 214, 255, 0.52), transparent 25rem),
+    linear-gradient(rgba(23, 32, 51, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 32, 51, 0.018) 1px, transparent 1px),
+    var(--canvas);
+  background-size: 32px 32px;
 }
 
-body,
-button,
-input {
-  font: inherit;
-}
+body, button, input { font: inherit; }
+button { color: inherit; }
+#root { min-height: 100vh; }
 
-button {
-  color: inherit;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   margin: 0;
   color: var(--ink);
   font-family: var(--font-heading);
-  line-height: 1.04;
+  line-height: 1.08;
 }
 
 h1 {
-  font-size: clamp(2.1rem, 3.8vw, 3.5rem);
-  letter-spacing: -0.05em;
-  margin: 0 0 14px;
+  max-width: 900px;
+  font-size: clamp(3rem, 6.4vw, 6.25rem);
+  font-weight: 800;
+  letter-spacing: -0.072em;
 }
 
 h2 {
-  font-size: clamp(1.32rem, 1.9vw, 1.92rem);
-  letter-spacing: -0.03em;
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  font-weight: 750;
+  letter-spacing: -0.045em;
 }
 
-h3 {
-  font-size: 1.02rem;
-  margin-bottom: 8px;
-}
-
-p {
-  margin: 0;
-}
-
-code,
-pre,
-kbd {
-  font-family: var(--font-mono);
-}
+h3 { font-size: 1.08rem; letter-spacing: -0.02em; }
+p { margin: 0; }
+code, pre, kbd { font-family: var(--font-mono); }
 
 code {
-  padding: 0.16rem 0.36rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--ink);
+  padding: 0.14rem 0.34rem;
+  border-radius: 5px;
+  background: #edf0f5;
+  color: #273452;
+  font-size: 0.92em;
 }
 
-a {
-  color: inherit;
-}
+a { color: inherit; }
+::selection { background: #cad5ff; color: var(--ink); }
 
 @media (max-width: 760px) {
-  :root {
-    font-size: 14px;
-  }
+  :root { font-size: 14px; }
+  h1 { font-size: clamp(2.7rem, 15vw, 4.4rem); }
 }

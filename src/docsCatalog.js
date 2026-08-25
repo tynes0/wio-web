@@ -2,10 +2,18 @@ export const repoOwner = 'tynes0'
 export const repoName = 'wio'
 export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
+export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.14.0'
+export const documentedWioVersion = '0.16.0'
 
 export const docsCatalog = [
+  {
+    id: 'documentation-map',
+    title: 'Documentation Map',
+    category: 'Start Here',
+    description: 'The complete documentation map and recommended reading order.',
+    sourcePath: 'docs/README.md',
+  },
   {
     id: 'overview',
     title: 'Overview',
@@ -35,11 +43,102 @@ export const docsCatalog = [
     sourcePath: 'docs/WIO_LANGUAGE_DRAFT.md',
   },
   {
+    id: 'language-spec-0-16',
+    title: 'Language Specification 0.16',
+    category: 'Language',
+    description: 'Normative application scheduling, cancellation, native ownership, and host-boundary rules for Wio 0.16.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_16.md',
+  },
+  {
+    id: 'language-spec-0-15',
+    title: 'Language Specification 0.15',
+    category: 'Historical Specs',
+    description: 'Canonical bracket attributes and the compile-time attribute processing model introduced in Wio 0.15.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_15.md',
+  },
+  {
     id: 'language-spec-0-13',
     title: 'Language Specification 0.13',
     category: 'Language',
     description: 'Normative Unicode text, const-generic, attribute, extension, matching, and fixed-array rules for Wio 0.13.',
     sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_13.md',
+  },
+  {
+    id: 'language-spec-v1',
+    title: 'V1 Coherence Candidate',
+    category: 'Language',
+    description: 'Candidate normative coherence rules for the Wio v1 language model.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_V1_COHERENCE.md',
+  },
+  {
+    id: 'language-spec-0-11',
+    title: 'Language Specification 0.11',
+    category: 'Historical Specs',
+    description: 'Language and standard-library foundation rules introduced in Wio 0.11.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_11.md',
+  },
+  {
+    id: 'language-spec-0-10',
+    title: 'Language Specification 0.10',
+    category: 'Historical Specs',
+    description: 'Const generics and native component rules introduced in Wio 0.10.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_10.md',
+  },
+  {
+    id: 'language-spec-0-9',
+    title: 'Language Specification 0.9',
+    category: 'Historical Specs',
+    description: 'Generic types, constraints, and specialization rules from Wio 0.9.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_9.md',
+  },
+  {
+    id: 'language-spec-0-8',
+    title: 'Language Specification 0.8',
+    category: 'Historical Specs',
+    description: 'Nullability, references, views, and lifetime foundations from Wio 0.8.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_8.md',
+  },
+  {
+    id: 'std-spec-0-11',
+    title: 'Standard Library Contract 0.11',
+    category: 'Historical Specs',
+    description: 'The versioned standard-library contract established for Wio 0.11.',
+    sourcePath: 'docs/spec/WIO_STD_SPEC_0_11.md',
+  },
+  {
+    id: 'async-model',
+    title: 'Async & Coroutine Model',
+    category: 'Language',
+    description: 'Tasks, coroutines, await, scheduling, cancellation, and structured concurrency.',
+    sourcePath: 'docs/WIO_ASYNC_MODEL.md',
+  },
+  {
+    id: 'async-evolution',
+    title: 'Async Evolution Plan',
+    category: 'Evolution',
+    description: 'The roadmap for a powerful but simple async and multithreading model.',
+    sourcePath: 'docs/WIO_ASYNC_EVOLUTION_PLAN.md',
+  },
+  {
+    id: 'attribute-system',
+    title: 'Attribute System Plan',
+    category: 'Evolution',
+    description: 'Typed user attributes, validation, checked derives, behavior, and reflection.',
+    sourcePath: 'docs/WIO_ATTRIBUTE_SYSTEM_PLAN.md',
+  },
+  {
+    id: 'language-evolution',
+    title: 'Language Evolution Plan',
+    category: 'Evolution',
+    description: 'Open language design work and the path from current semantics to v1.',
+    sourcePath: 'docs/WIO_LANGUAGE_EVOLUTION_PLAN.md',
+  },
+  {
+    id: 'reference-lifetimes',
+    title: 'Reference & View Lifetimes',
+    category: 'Language',
+    description: 'Ownership, ref/view behavior, escape rules, and lifetime diagnostics.',
+    sourcePath: 'docs/REFERENCE_LIFETIMES.md',
   },
   {
     id: 'std',
@@ -63,6 +162,27 @@ export const docsCatalog = [
     sourcePath: 'docs/WIO_EDITOR_ECOSYSTEM_PLAN.md',
   },
   {
+    id: 'self-hosted-cli',
+    title: 'Self-hosted CLI',
+    category: 'Tooling',
+    description: 'Architecture and migration notes for the Wio-written command-line interface.',
+    sourcePath: 'docs/WIO_SELF_HOSTED_CLI.md',
+  },
+  {
+    id: 'filesystem-errors',
+    title: 'Filesystem Error Policy',
+    category: 'Reference',
+    description: 'Stable filesystem failure domains, native error mapping, and Result behavior.',
+    sourcePath: 'docs/FILESYSTEM_ERROR_POLICY.md',
+  },
+  {
+    id: 'fuzzing',
+    title: 'Fuzzing Guide',
+    category: 'Tooling',
+    description: 'How the parser and compiler fuzz corpus is built, run, and maintained.',
+    sourcePath: 'docs/FUZZING.md',
+  },
+  {
     id: 'interop',
     title: 'Interop Guide',
     category: 'Interop',
@@ -82,6 +202,20 @@ export const docsCatalog = [
     category: 'Interop',
     description: 'Normative support inventory for nested values, typed dynamic fields, ABI v8, and const generics.',
     sourcePath: 'docs/WIO_SDK_0_14_PARITY_MATRIX.md',
+  },
+  {
+    id: 'sdk-evolution',
+    title: 'SDK Evolution Plan',
+    category: 'Evolution',
+    description: 'Feature parity, ABI negotiation, and the host SDK path to v1.',
+    sourcePath: 'docs/WIO_SDK_EVOLUTION_PLAN.md',
+  },
+  {
+    id: 'sdk-parity-0-13',
+    title: 'SDK 0.13 Parity Matrix',
+    category: 'Historical Specs',
+    description: 'Historical host-value and feature-support baseline for Wio 0.13.',
+    sourcePath: 'docs/WIO_SDK_0_13_PARITY_MATRIX.md',
   },
   {
     id: 'runtime',
@@ -154,11 +288,39 @@ export const docsCatalog = [
     sourcePath: 'docs/WIO_TRACEABILITY.md',
   },
   {
+    id: 'release-acceptance-0-16',
+    title: 'Wio 0.16 Acceptance Matrix',
+    category: 'Release',
+    description: 'The exact Windows and Ubuntu evidence required to publish Wio 0.16.',
+    sourcePath: 'docs/WIO_0_16_ACCEPTANCE.md',
+  },
+  {
+    id: 'release-notes-0-16',
+    title: 'Wio 0.16 Release Notes',
+    category: 'Release',
+    description: 'Deterministic applications, host-driven async, cancellation, callbacks, and native resource ownership.',
+    sourcePath: 'docs/WIO_0_16_RELEASE_NOTES.md',
+  },
+  {
+    id: 'release-notes-0-15',
+    title: 'Wio 0.15 Release Notes',
+    category: 'Release',
+    description: 'Canonical bracket attributes and the checked compile-time processor system.',
+    sourcePath: 'docs/WIO_0_15_RELEASE_NOTES.md',
+  },
+  {
     id: 'release-notes-0-14',
     title: 'Wio 0.14 Release Notes',
     category: 'Release',
     description: 'SDK value parity, Unicode/JSON/regex correctness, and cross-platform conformance changes.',
     sourcePath: 'docs/WIO_0_14_RELEASE_NOTES.md',
+  },
+  {
+    id: 'release-notes-0-13',
+    title: 'Wio 0.13 Release Notes',
+    category: 'Release',
+    description: 'Language coherence, Unicode, const generics, editor, and SDK changes in Wio 0.13.',
+    sourcePath: 'docs/WIO_0_13_RELEASE_NOTES.md',
   },
 ]
 
@@ -166,9 +328,11 @@ export const categoryOrder = [
   'Start Here',
   'Reference',
   'Language',
+  'Evolution',
   'Tooling',
   'Interop',
   'Support',
+  'Historical Specs',
   'Pre-v1',
   'Post-v1',
   'Release',
@@ -185,4 +349,39 @@ export function getRawDocUrl(sourcePath) {
 
 export function getBlobDocUrl(sourcePath) {
   return `${repoUrl}/blob/main/${sourcePath}`
+}
+
+function normalizeRepoPath(sourcePath, targetPath) {
+  const base = sourcePath.includes('/') ? sourcePath.slice(0, sourcePath.lastIndexOf('/') + 1) : ''
+  const segments = `${base}${targetPath}`.split('/')
+  const normalized = []
+
+  for (const segment of segments) {
+    if (!segment || segment === '.') continue
+    if (segment === '..') normalized.pop()
+    else normalized.push(segment)
+  }
+
+  return normalized.join('/')
+}
+
+export function resolveDocumentationLink(sourcePath, target) {
+  const trimmed = target.trim()
+  if (/^(https?:|mailto:)/i.test(trimmed)) {
+    return { href: trimmed, external: true }
+  }
+  if (trimmed.startsWith('#')) {
+    return { href: trimmed, external: false }
+  }
+
+  const [pathPart, fragment = ''] = trimmed.split('#', 2)
+  const normalizedPath = normalizeRepoPath(sourcePath, pathPart)
+  const internalDoc = docsCatalog.find((doc) => doc.sourcePath === normalizedPath)
+
+  if (internalDoc) {
+    return { href: `#docs/${internalDoc.id}`, external: false }
+  }
+
+  const suffix = fragment ? `#${fragment}` : ''
+  return { href: `${getBlobDocUrl(normalizedPath)}${suffix}`, external: true }
 }
