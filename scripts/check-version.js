@@ -34,8 +34,11 @@ for (const doc of docsCatalog) {
 }
 
 for (const requiredId of [
+  'language-spec-0-16',
   'language-spec-0-13',
   'sdk-parity-0-14',
+  'release-notes-0-16',
+  'release-acceptance-0-16',
   'release-notes-0-14',
   'editor-ecosystem',
   'v1-release-plan',

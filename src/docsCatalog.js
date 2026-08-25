@@ -4,7 +4,7 @@ export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.14.0'
+export const documentedWioVersion = '0.16.0'
 
 export const docsCatalog = [
   {
@@ -41,6 +41,20 @@ export const docsCatalog = [
     category: 'Language',
     description: 'The current language surface, semantics, and examples.',
     sourcePath: 'docs/WIO_LANGUAGE_DRAFT.md',
+  },
+  {
+    id: 'language-spec-0-16',
+    title: 'Language Specification 0.16',
+    category: 'Language',
+    description: 'Normative application scheduling, cancellation, native ownership, and host-boundary rules for Wio 0.16.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_16.md',
+  },
+  {
+    id: 'language-spec-0-15',
+    title: 'Language Specification 0.15',
+    category: 'Historical Specs',
+    description: 'Canonical bracket attributes and the compile-time attribute processing model introduced in Wio 0.15.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_15.md',
   },
   {
     id: 'language-spec-0-13',
@@ -272,6 +286,27 @@ export const docsCatalog = [
     category: 'Release',
     description: 'Mapping between feature work, tests, docs, and closure state.',
     sourcePath: 'docs/WIO_TRACEABILITY.md',
+  },
+  {
+    id: 'release-acceptance-0-16',
+    title: 'Wio 0.16 Acceptance Matrix',
+    category: 'Release',
+    description: 'The exact Windows and Ubuntu evidence required to publish Wio 0.16.',
+    sourcePath: 'docs/WIO_0_16_ACCEPTANCE.md',
+  },
+  {
+    id: 'release-notes-0-16',
+    title: 'Wio 0.16 Release Notes',
+    category: 'Release',
+    description: 'Deterministic applications, host-driven async, cancellation, callbacks, and native resource ownership.',
+    sourcePath: 'docs/WIO_0_16_RELEASE_NOTES.md',
+  },
+  {
+    id: 'release-notes-0-15',
+    title: 'Wio 0.15 Release Notes',
+    category: 'Release',
+    description: 'Canonical bracket attributes and the checked compile-time processor system.',
+    sourcePath: 'docs/WIO_0_15_RELEASE_NOTES.md',
   },
   {
     id: 'release-notes-0-14',
