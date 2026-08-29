@@ -904,7 +904,7 @@ function HomePage({ releaseState, platform, recommendedAsset }) {
     <div className="page-view home-view">
       <section className="hero-section">
         <div className="hero-copy">
-          <div className="hero-edition"><span>Wio learning home</span><i>v0.16 path</i></div>
+          <div className="hero-edition"><span>Wio learning home</span><i>v0.17 path</i></div>
           <p className="eyebrow">A native-first programming language</p>
           <h1>Code that stays<br /><span>close to you.</span></h1>
           <p className="hero-text">
