@@ -302,6 +302,20 @@ export const docsCatalog = [
     sourcePath: 'docs/WIO_TRACEABILITY.md',
   },
   {
+    id: 'release-acceptance-0-17',
+    title: 'Wio 0.17 Acceptance Matrix',
+    category: 'Release',
+    description: 'The cross-platform gate for ordinary application bodies, composed scheduling attributes, and ABI v11 stage metadata.',
+    sourcePath: 'docs/WIO_0_17_ACCEPTANCE.md',
+  },
+  {
+    id: 'release-notes-0-17',
+    title: 'Wio 0.17 Release Notes',
+    category: 'Release',
+    description: 'Ordinary application and system members, attribute-driven scheduling, composition, and host inspection.',
+    sourcePath: 'docs/WIO_0_17_RELEASE_NOTES.md',
+  },
+  {
     id: 'release-acceptance-0-16',
     title: 'Wio 0.16 Acceptance Matrix',
     category: 'Release',
