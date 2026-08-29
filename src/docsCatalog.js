@@ -4,7 +4,7 @@ export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.16.0'
+export const documentedWioVersion = '0.17.0'
 
 export const docsCatalog = [
   {
@@ -43,9 +43,23 @@ export const docsCatalog = [
     sourcePath: 'docs/WIO_LANGUAGE_DRAFT.md',
   },
   {
+    id: 'language-spec-0-17',
+    title: 'Language Specification 0.17',
+    category: 'Language',
+    description: 'Normative ordinary application/system members, lifecycle attributes, stage metadata, and ABI v11 rules.',
+    sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_17.md',
+  },
+  {
+    id: 'application-model-0-17',
+    title: 'Wio 0.17 Application Model',
+    category: 'Language',
+    description: 'How to build and migrate applications with ordinary functions plus Start, Update, Close, Fixed, After, and Main attributes.',
+    sourcePath: 'docs/WIO_0_17_APPLICATION_MODEL.md',
+  },
+  {
     id: 'language-spec-0-16',
     title: 'Language Specification 0.16',
-    category: 'Language',
+    category: 'Historical Specs',
     description: 'Normative application scheduling, cancellation, native ownership, and host-boundary rules for Wio 0.16.',
     sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_16.md',
   },
@@ -286,6 +300,20 @@ export const docsCatalog = [
     category: 'Release',
     description: 'Mapping between feature work, tests, docs, and closure state.',
     sourcePath: 'docs/WIO_TRACEABILITY.md',
+  },
+  {
+    id: 'release-acceptance-0-17',
+    title: 'Wio 0.17 Acceptance Matrix',
+    category: 'Release',
+    description: 'The cross-platform gate for ordinary application bodies, composed scheduling attributes, and ABI v11 stage metadata.',
+    sourcePath: 'docs/WIO_0_17_ACCEPTANCE.md',
+  },
+  {
+    id: 'release-notes-0-17',
+    title: 'Wio 0.17 Release Notes',
+    category: 'Release',
+    description: 'Ordinary application and system members, attribute-driven scheduling, composition, and host inspection.',
+    sourcePath: 'docs/WIO_0_17_RELEASE_NOTES.md',
   },
   {
     id: 'release-acceptance-0-16',
