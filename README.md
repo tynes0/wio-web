@@ -3,7 +3,10 @@
 This folder hosts the static Wio website.
 
 The site package follows the Wio product release line. This branch targets Wio
-`0.16.0`; canonical content and the VS Code extension use the same version.
+`0.19.0`; canonical content and the VS Code extension use the same version.
+The download recommendation still comes from published GitHub releases, not
+this documentation version. Merge the compiler documentation before deploying
+new catalog entries, and do not announce an unpublished candidate as available.
 
 It is intentionally designed to work well on Vercel without a custom backend.
 
