@@ -4,9 +4,58 @@ export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.17.0'
+export const documentedWioVersion = '0.19.0'
 
 export const docsCatalog = [
+  {
+    id: 'vm-runtime',
+    title: 'VM Runtime',
+    category: 'Reference',
+    description: 'Bytecode execution, native callable entries, module globals, ownership and bounded runtime contracts.',
+    sourcePath: 'docs/WIO_VM_RUNTIME.md',
+  },
+  {
+    id: 'vm-artifacts',
+    title: 'VM Executables and Libraries',
+    category: 'Interop',
+    description: 'Packaging and deployment of interpreted artifacts; these are not JIT-compiled Wio bodies.',
+    sourcePath: 'docs/WIO_VM_ARTIFACTS.md',
+  },
+  {
+    id: 'release-notes-0-18-1',
+    title: 'Wio 0.18.1 Release Notes',
+    category: 'Release',
+    description: 'Typed WIR correctness hotfix for increments, numeric promotion and implicit receivers.',
+    sourcePath: 'docs/WIO_0_18_1_RELEASE_NOTES.md',
+  },
+  {
+    id: 'release-notes-0-18',
+    title: 'Wio 0.18 Release Notes',
+    category: 'Release',
+    description: 'The Lowered-WIR C++ backend release baseline.',
+    sourcePath: 'docs/WIO_0_18_RELEASE_NOTES.md',
+  },
+  {
+    id: 'release-notes-0-19',
+    title: 'Wio 0.19 Release Notes',
+    category: 'Release',
+    description: 'Interim native/VM release, runtime progress, correctness fixes, and remaining qualification limits.',
+    sourcePath: 'docs/WIO_0_19_RELEASE_NOTES.md',
+  },
+  {
+    id: 'known-issues',
+    title: 'Known Issues and Qualification Gaps',
+    category: 'Support',
+    description: 'Open correctness, performance, SDK, and release-qualification work; not hidden by version metadata.',
+    sourcePath: 'docs/WIO_KNOWN_ISSUES.md',
+  },
+  {
+    id: 'error-codes',
+    title: 'Error and Status Codes',
+    category: 'Reference',
+    description: 'Source-derived definitions and diagnostics for WIR, bytecode, VM, native, SDK, and standard-library errors.',
+    sourcePath: 'docs/WIO_ERROR_CODES.md',
+  },
   {
     id: 'documentation-map',
     title: 'Documentation Map',

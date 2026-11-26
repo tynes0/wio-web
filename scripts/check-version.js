@@ -34,6 +34,9 @@ for (const doc of docsCatalog) {
 }
 
 for (const requiredId of [
+  'release-notes-0-19',
+  'known-issues',
+  'error-codes',
   'language-spec-0-17',
   'application-model-0-17',
   'language-spec-0-16',
