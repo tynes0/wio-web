@@ -4,9 +4,16 @@ export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.19.0'
+export const documentedWioVersion = '0.20.0'
 
 export const docsCatalog = [
+  {
+    id: 'release-notes-0-20',
+    title: 'Wio 0.20 Release Notes',
+    category: 'Release',
+    description: 'Analysis-only project checks, paired editor diagnostics and scoped release qualification.',
+    sourcePath: 'docs/WIO_0_20_RELEASE_NOTES.md',
+  },
   {
     id: 'vm-runtime',
     title: 'VM Runtime',
