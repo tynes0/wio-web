@@ -34,6 +34,7 @@ for (const doc of docsCatalog) {
 }
 
 for (const requiredId of [
+  'release-notes-0-20-1',
   'release-notes-0-20',
   'release-notes-0-19',
   'known-issues',
