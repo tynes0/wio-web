@@ -4,9 +4,16 @@ export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.20.1'
+export const documentedWioVersion = '0.20.2'
 
 export const docsCatalog = [
+  {
+    id: 'release-notes-0-20-2',
+    title: 'Wio 0.20.2 Release Notes',
+    category: 'Release',
+    description: 'Bytecode-first VM executable builds, reusable standard native support and explicit project adapter fallback.',
+    sourcePath: 'docs/WIO_0_20_2_RELEASE_NOTES.md',
+  },
   {
     id: 'release-notes-0-20-1',
     title: 'Wio 0.20.1 Release Notes',

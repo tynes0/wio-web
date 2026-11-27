@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "product": "wio-web",
-  "version": "0.20.1",
-  "documentedWio": "0.20.1",
+  "version": "0.20.2",
+  "documentedWio": "0.20.2",
   "channel": "stable"
 }
