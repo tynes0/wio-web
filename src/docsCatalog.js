@@ -4,9 +4,16 @@ export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.20.2'
+export const documentedWioVersion = '0.20.3'
 
 export const docsCatalog = [
+  {
+    id: 'release-notes-0-20-3',
+    title: 'Wio 0.20.3 Native Adapter Requirements',
+    category: 'Release',
+    description: 'Inspect native adapter requirements identities separately from VM bodies; cache reuse remains disabled.',
+    sourcePath: 'docs/WIO_0_20_3_RELEASE_NOTES.md',
+  },
   {
     id: 'release-notes-0-20-2',
     title: 'Wio 0.20.2 Release Notes',
