@@ -2,7 +2,7 @@
 
 The Wio learning website uses React and Vite, with a small cached Vercel function
 for the GitHub release feed. Documentation and std sources follow the published
-Wio `0.20.4` baseline. Downloads follow the latest published stable release,
+Wio `0.20.5` baseline. Downloads follow the latest published stable release,
 independently of the documentation baseline.
 
 ## What the site does
