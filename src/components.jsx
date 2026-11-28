@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { docsCatalog, repoUrl } from './docsCatalog.js'
 import { examples } from './examples.js'
 import { stdModules } from './stdCatalog.js'
+import { shouldCloseNavigationOnLeave } from './navigation.js'
 
 export const Arrow = () => <span aria-hidden="true">↗</span>
 export function Logo({ large = false }) {
@@ -175,14 +176,20 @@ export function Header({ page, onSearch }) {
     }
   }, [])
   return (
-    <header className="header" ref={header}>
+    <header
+      className="header"
+      ref={header}
+      onMouseLeave={(event) => {
+        if (shouldCloseNavigationOnLeave(header.current, event.relatedTarget)) setMenu(null)
+      }}
+    >
       <a href="#home" className="brand" aria-label="Wio home" onClick={() => setMenu(null)}>
         <Logo />
         <strong>
           wio<span> / </span>
         </strong>
       </a>
-      <nav aria-label="Main navigation" onMouseLeave={() => setMenu(null)}>
+      <nav aria-label="Main navigation">
         {navigation.map((group) => (
           <div
             className="nav-group"
