@@ -29,7 +29,8 @@ for (const [name, version] of versions) {
 const ids = new Set()
 for (const doc of docsCatalog) {
   if (ids.has(doc.id)) throw new Error(`Duplicate documentation id: ${doc.id}`)
-  if (!categoryOrder.includes(doc.category)) throw new Error(`Unknown documentation category: ${doc.category}`)
+  if (!categoryOrder.includes(doc.category))
+    throw new Error(`Unknown documentation category: ${doc.category}`)
   ids.add(doc.id)
 }
 
@@ -54,7 +55,10 @@ for (const requiredId of [
   'v1-release-plan',
   'post-v1-roadmap',
 ]) {
-  if (!ids.has(requiredId)) throw new Error(`Required documentation entry is missing: ${requiredId}`)
+  if (!ids.has(requiredId))
+    throw new Error(`Required documentation entry is missing: ${requiredId}`)
 }
 
-console.log(`Validated Wio Web ${packageJson.version} and ${docsCatalog.length} documentation entries.`)
+console.log(
+  `Validated Wio Web ${packageJson.version} and ${docsCatalog.length} documentation entries.`,
+)

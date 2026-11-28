@@ -3,10 +3,8 @@ function escapeHtml(value) {
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
-}
-
-function escapeAttribute(value) {
-  return escapeHtml(value).replaceAll('"', '&quot;').replaceAll("'", '&#39;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
 }
 
 function headingId(value) {
@@ -15,141 +13,142 @@ function headingId(value) {
     .replace(/[`*_]/g, '')
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\u00c0-\u024f]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+    .replace(/[^\p{L}\p{N}\s_-]/gu, '')
+    .replace(/\s/g, '-')
 }
 
-function formatInline(value, resolveLink) {
-  let result = escapeHtml(value)
-
-  result = result.replace(/`([^`]+)`/g, '<code>$1</code>')
-  result = result.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-  result = result.replace(/\*([^*]+)\*/g, '<em>$1</em>')
-  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, target) => {
-    const resolved = resolveLink ? resolveLink(target) : { href: target, external: true }
-    const external = resolved.external ? ' target="_blank" rel="noreferrer"' : ''
-    return `<a href="${escapeAttribute(resolved.href)}"${external}>${label}</a>`
-  })
-
-  return result
+function inline(value, resolveLink) {
+  const pattern = /(`[^`]+`|\[[^\]]+\]\([^\s)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g
+  return value
+    .split(pattern)
+    .map((token) => {
+      if (token.startsWith('`') && token.endsWith('`'))
+        return `<code>${escapeHtml(token.slice(1, -1))}</code>`
+      const link = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
+      if (link) {
+        const resolved = resolveLink ? resolveLink(link[2]) : { href: link[2], external: true }
+        // Never allow javascript:, data:, protocol-relative links, or quoted HTML.
+        if (!/^(https?:\/\/|mailto:|#)/i.test(resolved.href)) return escapeHtml(link[1])
+        return `<a href="${escapeHtml(resolved.href)}"${resolved.external ? ' target="_blank" rel="noreferrer noopener"' : ''}>${inline(link[1])}</a>`
+      }
+      if (token.startsWith('**') && token.endsWith('**'))
+        return `<strong>${escapeHtml(token.slice(2, -2))}</strong>`
+      if (token.startsWith('*') && token.endsWith('*'))
+        return `<em>${escapeHtml(token.slice(1, -1))}</em>`
+      return escapeHtml(token)
+    })
+    .join('')
 }
 
-export function renderMarkdown(markdown, options = {}) {
-  if (!markdown) {
-    return '<p>No documentation content was loaded.</p>'
-  }
+function cells(line) {
+  return line
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split(/(?<!\\)\|/)
+    .map((cell) => cell.trim().replace(/\\\|/g, '|'))
+}
 
-  const normalized = markdown.replace(/\r\n/g, '\n')
-  const codeBlocks = []
-  const placeholderPrefix = '@@WIO_CODEBLOCK_'
-
-  const withoutCodeBlocks = normalized.replace(/```([\w-]+)?\n([\s\S]*?)```/g, (_, language = '', code = '') => {
-    const index = codeBlocks.length
-    codeBlocks.push({ language, code })
-    return `${placeholderPrefix}${index}@@`
-  })
-
-  const lines = withoutCodeBlocks.split('\n')
+export function renderMarkdown(markdown, { resolveLink } = {}) {
+  if (!markdown) return '<p>No content was attached to this document.</p>'
+  const lines = markdown.replace(/\r\n/g, '\n').split('\n')
   const html = []
+  const headings = new Map()
   let paragraph = []
-  let listType = null
-  let listItems = []
-
-  const flushParagraph = () => {
-    if (paragraph.length === 0) {
-      return
+  let list = null
+  const flush = () => {
+    if (paragraph.length) {
+      html.push(`<p>${inline(paragraph.join(' '), resolveLink)}</p>`)
+      paragraph = []
     }
-
-    const text = paragraph.join(' ').trim()
-    if (text.length > 0) {
-      html.push(`<p>${formatInline(text, options.resolveLink)}</p>`)
-    }
-    paragraph = []
   }
-
-  const flushList = () => {
-    if (listItems.length === 0 || !listType) {
-      return
+  const closeList = () => {
+    if (list) {
+      html.push(`</${list}>`)
+      list = null
     }
-
-    const tag = listType === 'ordered' ? 'ol' : 'ul'
-    html.push(`<${tag}>${listItems.map((item) => `<li>${formatInline(item, options.resolveLink)}</li>`).join('')}</${tag}>`)
-    listType = null
-    listItems = []
   }
-
-  for (const rawLine of lines) {
-    const line = rawLine.trimEnd()
-    const trimmed = line.trim()
-
-    const codeBlockMatch = trimmed.match(/^@@WIO_CODEBLOCK_(\d+)@@$/)
-    if (codeBlockMatch) {
-      flushParagraph()
-      flushList()
-      const { language, code } = codeBlocks[Number(codeBlockMatch[1])]
-      const className = language ? ` class="language-${language}"` : ''
-      html.push(`<pre><code${className}>${escapeHtml(code.trimEnd())}</code></pre>`)
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim()
+    const fence = trimmed.match(/^(`{3,}|~{3,})([\w+-]*)/)
+    if (fence) {
+      flush()
+      closeList()
+      const code = []
+      while (++i < lines.length && !lines[i].trim().startsWith(fence[1])) code.push(lines[i])
+      html.push(
+        `<pre tabindex="0"><code${fence[2] ? ` class="language-${escapeHtml(fence[2])}"` : ''}>${escapeHtml(code.join('\n'))}</code></pre>`,
+      )
       continue
     }
-
     if (!trimmed) {
-      flushParagraph()
-      flushList()
+      flush()
+      closeList()
       continue
     }
-
-    const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)$/)
-    if (headingMatch) {
-      flushParagraph()
-      flushList()
-      const level = headingMatch[1].length
-      const heading = headingMatch[2].trim()
-      html.push(`<h${level} id="${headingId(heading)}">${formatInline(heading, options.resolveLink)}</h${level}>`)
+    const anchor = trimmed.match(/^<a\s+(?:id|name)=["']([\w-]+)["']\s*><\/a>$/)
+    if (anchor) {
+      flush()
+      closeList()
+      html.push(`<span id="${escapeHtml(anchor[1])}"></span>`)
       continue
     }
-
-    if (/^---+$/.test(trimmed)) {
-      flushParagraph()
-      flushList()
+    const heading = trimmed.match(/^(#{1,6})\s+(.+)$/)
+    if (heading) {
+      flush()
+      closeList()
+      const slug = headingId(heading[2])
+      const count = headings.get(slug) ?? 0
+      headings.set(slug, count + 1)
+      const id = `${slug}${count ? `-${count}` : ''}`
+      html.push(
+        `<h${heading[1].length} id="${escapeHtml(id)}">${inline(heading[2], resolveLink)}</h${heading[1].length}>`,
+      )
+      continue
+    }
+    if (trimmed.includes('|') && /^\|?\s*:?-{3,}/.test(lines[i + 1]?.trim() ?? '')) {
+      flush()
+      closeList()
+      const header = cells(trimmed)
+      i++
+      const rows = []
+      while (i + 1 < lines.length && lines[i + 1].includes('|') && lines[i + 1].trim())
+        rows.push(cells(lines[++i]))
+      html.push(
+        `<div class="table-scroll"><table><thead><tr>${header.map((cell) => `<th>${inline(cell, resolveLink)}</th>`).join('')}</tr></thead><tbody>${rows.map((row) => `<tr>${row.map((cell) => `<td>${inline(cell, resolveLink)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`,
+      )
+      continue
+    }
+    const item = trimmed.match(/^(?:([-*+])|\d+\.)\s+(.+)$/)
+    if (item) {
+      flush()
+      const type = item[1] ? 'ul' : 'ol'
+      if (list !== type) {
+        closeList()
+        html.push(`<${type}>`)
+        list = type
+      }
+      html.push(`<li>${inline(item[2], resolveLink)}</li>`)
+      continue
+    }
+    if (/^([-*_])\1{2,}$/.test(trimmed)) {
+      flush()
+      closeList()
       html.push('<hr />')
       continue
     }
-
-    const orderedMatch = trimmed.match(/^\d+\.\s+(.+)$/)
-    if (orderedMatch) {
-      flushParagraph()
-      if (listType && listType !== 'ordered') {
-        flushList()
-      }
-      listType = 'ordered'
-      listItems.push(orderedMatch[1])
+    if (trimmed.startsWith('>')) {
+      flush()
+      closeList()
+      html.push(
+        `<blockquote><p>${inline(trimmed.replace(/^>\s?/, ''), resolveLink)}</p></blockquote>`,
+      )
       continue
     }
-
-    const unorderedMatch = trimmed.match(/^[-*]\s+(.+)$/)
-    if (unorderedMatch) {
-      flushParagraph()
-      if (listType && listType !== 'unordered') {
-        flushList()
-      }
-      listType = 'unordered'
-      listItems.push(unorderedMatch[1])
-      continue
-    }
-
-    const quoteMatch = trimmed.match(/^>\s+(.+)$/)
-    if (quoteMatch) {
-      flushParagraph()
-      flushList()
-      html.push(`<blockquote><p>${formatInline(quoteMatch[1], options.resolveLink)}</p></blockquote>`)
-      continue
-    }
-
+    closeList()
     paragraph.push(trimmed)
   }
-
-  flushParagraph()
-  flushList()
-
+  flush()
+  closeList()
   return html.join('\n')
 }

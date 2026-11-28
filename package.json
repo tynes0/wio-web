@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "check": "node ./scripts/check-version.js",
+    "check": "node ./scripts/check-version.js && node --test tests/*.test.js",
+    "sync-content": "node scripts/sync-content.mjs",
+    "prebuild": "npm run sync-content",
+    "test:examples": "node scripts/check-examples.mjs",
     "build": "npm run check && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

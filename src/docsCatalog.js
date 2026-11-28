@@ -8,59 +8,75 @@ export const documentedWioVersion = '0.20.4'
 
 export const docsCatalog = [
   {
+    id: 'builtin-methods',
+    title: 'Built-in Method Reference',
+    category: 'Reference',
+    description:
+      'Actual signatures for string, text, array, dictionary, enum, flagset, and coroutine members.',
+    sourcePath: 'docs/WIO_BUILTIN_METHODS.md',
+  },
+  {
     id: 'release-notes-0-20-4',
     title: 'Wio 0.20.4 Native Dependency Records',
     category: 'Release',
-    description: 'Inspect native source, header, linker and toolchain observations without enabling adapter cache reuse.',
+    description:
+      'Inspect native source, header, linker and toolchain observations without enabling adapter cache reuse.',
     sourcePath: 'docs/WIO_0_20_4_RELEASE_NOTES.md',
   },
   {
     id: 'release-notes-0-20-3',
     title: 'Wio 0.20.3 Native Adapter Requirements',
     category: 'Release',
-    description: 'Inspect native adapter requirements identities separately from VM bodies; cache reuse remains disabled.',
+    description:
+      'Inspect native adapter requirements identities separately from VM bodies; cache reuse remains disabled.',
     sourcePath: 'docs/WIO_0_20_3_RELEASE_NOTES.md',
   },
   {
     id: 'release-notes-0-20-2',
     title: 'Wio 0.20.2 Release Notes',
     category: 'Release',
-    description: 'Bytecode-first VM executable builds, reusable standard native support and explicit project adapter fallback.',
+    description:
+      'Bytecode-first VM executable builds, reusable standard native support and explicit project adapter fallback.',
     sourcePath: 'docs/WIO_0_20_2_RELEASE_NOTES.md',
   },
   {
     id: 'release-notes-0-20-1',
     title: 'Wio 0.20.1 Release Notes',
     category: 'Release',
-    description: 'Unlimited VM application execution, bounded embedding defaults and persistent executable budgets.',
+    description:
+      'Unlimited VM application execution, bounded embedding defaults and persistent executable budgets.',
     sourcePath: 'docs/WIO_0_20_1_RELEASE_NOTES.md',
   },
   {
     id: 'release-notes-0-20',
     title: 'Wio 0.20 Release Notes',
     category: 'Release',
-    description: 'Analysis-only project checks, paired editor diagnostics and scoped release qualification.',
+    description:
+      'Analysis-only project checks, paired editor diagnostics and scoped release qualification.',
     sourcePath: 'docs/WIO_0_20_RELEASE_NOTES.md',
   },
   {
     id: 'vm-runtime',
     title: 'VM Runtime',
     category: 'Reference',
-    description: 'Bytecode execution, native callable entries, module globals, ownership and bounded runtime contracts.',
+    description:
+      'Bytecode execution, native callable entries, module globals, ownership and bounded runtime contracts.',
     sourcePath: 'docs/WIO_VM_RUNTIME.md',
   },
   {
     id: 'vm-artifacts',
     title: 'VM Executables and Libraries',
     category: 'Interop',
-    description: 'Packaging and deployment of interpreted artifacts; these are not JIT-compiled Wio bodies.',
+    description:
+      'Packaging and deployment of interpreted artifacts; these are not JIT-compiled Wio bodies.',
     sourcePath: 'docs/WIO_VM_ARTIFACTS.md',
   },
   {
     id: 'release-notes-0-18-1',
     title: 'Wio 0.18.1 Release Notes',
     category: 'Release',
-    description: 'Typed WIR correctness hotfix for increments, numeric promotion and implicit receivers.',
+    description:
+      'Typed WIR correctness hotfix for increments, numeric promotion and implicit receivers.',
     sourcePath: 'docs/WIO_0_18_1_RELEASE_NOTES.md',
   },
   {
@@ -74,21 +90,24 @@ export const docsCatalog = [
     id: 'release-notes-0-19',
     title: 'Wio 0.19 Release Notes',
     category: 'Release',
-    description: 'Interim native/VM release, runtime progress, correctness fixes, and remaining qualification limits.',
+    description:
+      'Interim native/VM release, runtime progress, correctness fixes, and remaining qualification limits.',
     sourcePath: 'docs/WIO_0_19_RELEASE_NOTES.md',
   },
   {
     id: 'known-issues',
     title: 'Known Issues and Qualification Gaps',
     category: 'Support',
-    description: 'Open correctness, performance, SDK, and release-qualification work; not hidden by version metadata.',
+    description:
+      'Open correctness, performance, SDK, and release-qualification work; not hidden by version metadata.',
     sourcePath: 'docs/WIO_KNOWN_ISSUES.md',
   },
   {
     id: 'error-codes',
     title: 'Error and Status Codes',
     category: 'Reference',
-    description: 'Source-derived definitions and diagnostics for WIR, bytecode, VM, native, SDK, and standard-library errors.',
+    description:
+      'Source-derived definitions and diagnostics for WIR, bytecode, VM, native, SDK, and standard-library errors.',
     sourcePath: 'docs/WIO_ERROR_CODES.md',
   },
   {
@@ -116,7 +135,8 @@ export const docsCatalog = [
     id: 'cli-reference',
     title: 'CLI Reference',
     category: 'Reference',
-    description: 'Command-by-command reference for build, file, project, bind, env, package, and perf.',
+    description:
+      'Command-by-command reference for build, file, project, bind, env, package, and perf.',
     sourcePath: 'docs/WIO_CLI_REFERENCE.md',
   },
   {
@@ -130,35 +150,40 @@ export const docsCatalog = [
     id: 'language-spec-0-17',
     title: 'Language Specification 0.17',
     category: 'Language',
-    description: 'Normative ordinary application/system members, lifecycle attributes, stage metadata, and ABI v11 rules.',
+    description:
+      'Normative ordinary application/system members, lifecycle attributes, stage metadata, and ABI v11 rules.',
     sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_17.md',
   },
   {
     id: 'application-model-0-17',
     title: 'Wio 0.17 Application Model',
     category: 'Language',
-    description: 'How to build and migrate applications with ordinary functions plus Start, Update, Close, Fixed, After, and Main attributes.',
+    description:
+      'How to build and migrate applications with ordinary functions plus Start, Update, Close, Fixed, After, and Main attributes.',
     sourcePath: 'docs/WIO_0_17_APPLICATION_MODEL.md',
   },
   {
     id: 'language-spec-0-16',
     title: 'Language Specification 0.16',
     category: 'Historical Specs',
-    description: 'Normative application scheduling, cancellation, native ownership, and host-boundary rules for Wio 0.16.',
+    description:
+      'Normative application scheduling, cancellation, native ownership, and host-boundary rules for Wio 0.16.',
     sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_16.md',
   },
   {
     id: 'language-spec-0-15',
     title: 'Language Specification 0.15',
     category: 'Historical Specs',
-    description: 'Canonical bracket attributes and the compile-time attribute processing model introduced in Wio 0.15.',
+    description:
+      'Canonical bracket attributes and the compile-time attribute processing model introduced in Wio 0.15.',
     sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_15.md',
   },
   {
     id: 'language-spec-0-13',
     title: 'Language Specification 0.13',
     category: 'Language',
-    description: 'Normative Unicode text, const-generic, attribute, extension, matching, and fixed-array rules for Wio 0.13.',
+    description:
+      'Normative Unicode text, const-generic, attribute, extension, matching, and fixed-array rules for Wio 0.13.',
     sourcePath: 'docs/spec/WIO_LANGUAGE_SPEC_0_13.md',
   },
   {
@@ -249,14 +274,16 @@ export const docsCatalog = [
     id: 'project-system',
     title: 'Project System',
     category: 'Tooling',
-    description: 'How makewio, project commands, packaging, and generated artifact policy fit together.',
+    description:
+      'How makewio, project commands, packaging, and generated artifact policy fit together.',
     sourcePath: 'docs/WIO_PROJECT_SYSTEM.md',
   },
   {
     id: 'editor-ecosystem',
     title: 'Editor Ecosystem Plan',
     category: 'Tooling',
-    description: 'Shared compiler-service and release plan for VS Code, Visual Studio, Rider, and CLion.',
+    description:
+      'Shared compiler-service and release plan for VS Code, Visual Studio, Rider, and CLion.',
     sourcePath: 'docs/WIO_EDITOR_ECOSYSTEM_PLAN.md',
   },
   {
@@ -298,7 +325,8 @@ export const docsCatalog = [
     id: 'sdk-parity-0-14',
     title: 'SDK 0.14 Parity Matrix',
     category: 'Interop',
-    description: 'Normative support inventory for nested values, typed dynamic fields, ABI v8, and const generics.',
+    description:
+      'Normative support inventory for nested values, typed dynamic fields, ABI v8, and const generics.',
     sourcePath: 'docs/WIO_SDK_0_14_PARITY_MATRIX.md',
   },
   {
@@ -368,14 +396,16 @@ export const docsCatalog = [
     id: 'v1-release-plan',
     title: 'V1 Release Plan',
     category: 'Pre-v1',
-    description: 'Release-by-release delivery plan, mandatory gates, and scope rules through Wio v1.0.0.',
+    description:
+      'Release-by-release delivery plan, mandatory gates, and scope rules through Wio v1.0.0.',
     sourcePath: 'docs/WIO_V1_RELEASE_PLAN.md',
   },
   {
     id: 'post-v1-roadmap',
     title: 'Post-v1 Roadmap',
     category: 'Post-v1',
-    description: 'Planned v1.x themes, v2 research, ecosystem growth, and deliberately deferred work.',
+    description:
+      'Planned v1.x themes, v2 research, ecosystem growth, and deliberately deferred work.',
     sourcePath: 'docs/WIO_POST_V1_ROADMAP.md',
   },
   {
@@ -389,14 +419,16 @@ export const docsCatalog = [
     id: 'release-acceptance-0-17',
     title: 'Wio 0.17 Acceptance Matrix',
     category: 'Release',
-    description: 'The cross-platform gate for ordinary application bodies, composed scheduling attributes, and ABI v11 stage metadata.',
+    description:
+      'The cross-platform gate for ordinary application bodies, composed scheduling attributes, and ABI v11 stage metadata.',
     sourcePath: 'docs/WIO_0_17_ACCEPTANCE.md',
   },
   {
     id: 'release-notes-0-17',
     title: 'Wio 0.17 Release Notes',
     category: 'Release',
-    description: 'Ordinary application and system members, attribute-driven scheduling, composition, and host inspection.',
+    description:
+      'Ordinary application and system members, attribute-driven scheduling, composition, and host inspection.',
     sourcePath: 'docs/WIO_0_17_RELEASE_NOTES.md',
   },
   {
@@ -410,7 +442,8 @@ export const docsCatalog = [
     id: 'release-notes-0-16',
     title: 'Wio 0.16 Release Notes',
     category: 'Release',
-    description: 'Deterministic applications, host-driven async, cancellation, callbacks, and native resource ownership.',
+    description:
+      'Deterministic applications, host-driven async, cancellation, callbacks, and native resource ownership.',
     sourcePath: 'docs/WIO_0_16_RELEASE_NOTES.md',
   },
   {
@@ -424,14 +457,16 @@ export const docsCatalog = [
     id: 'release-notes-0-14',
     title: 'Wio 0.14 Release Notes',
     category: 'Release',
-    description: 'SDK value parity, Unicode/JSON/regex correctness, and cross-platform conformance changes.',
+    description:
+      'SDK value parity, Unicode/JSON/regex correctness, and cross-platform conformance changes.',
     sourcePath: 'docs/WIO_0_14_RELEASE_NOTES.md',
   },
   {
     id: 'release-notes-0-13',
     title: 'Wio 0.13 Release Notes',
     category: 'Release',
-    description: 'Language coherence, Unicode, const generics, editor, and SDK changes in Wio 0.13.',
+    description:
+      'Language coherence, Unicode, const generics, editor, and SDK changes in Wio 0.13.',
     sourcePath: 'docs/WIO_0_13_RELEASE_NOTES.md',
   },
 ]
@@ -483,7 +518,11 @@ export function resolveDocumentationLink(sourcePath, target) {
     return { href: trimmed, external: true }
   }
   if (trimmed.startsWith('#')) {
-    return { href: trimmed, external: false }
+    const currentDoc = docsCatalog.find((doc) => doc.sourcePath === sourcePath)
+    return {
+      href: currentDoc ? `#docs/${currentDoc.id}~${trimmed.slice(1)}` : trimmed,
+      external: false,
+    }
   }
 
   const [pathPart, fragment = ''] = trimmed.split('#', 2)
@@ -491,7 +530,10 @@ export function resolveDocumentationLink(sourcePath, target) {
   const internalDoc = docsCatalog.find((doc) => doc.sourcePath === normalizedPath)
 
   if (internalDoc) {
-    return { href: `#docs/${internalDoc.id}`, external: false }
+    return {
+      href: `#docs/${internalDoc.id}${fragment ? `~${fragment}` : ''}`,
+      external: false,
+    }
   }
 
   const suffix = fragment ? `#${fragment}` : ''
