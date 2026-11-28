@@ -4,9 +4,17 @@ export const repoUrl = `https://github.com/${repoOwner}/${repoName}`
 export const releaseApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
 export const releasesApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?per_page=100`
 export const latestReleaseUrl = `${repoUrl}/releases/latest`
-export const documentedWioVersion = '0.20.4'
+export const documentedWioVersion = '0.20.5'
 
 export const docsCatalog = [
+  {
+    id: 'release-notes-0-20-5',
+    title: 'Wio 0.20.5 Native VM Adapter Cache',
+    category: 'Release',
+    description:
+      'Verified native adapter reuse on classified Windows/Linux toolchains, private build cohorts and explicit macOS safe fallback.',
+    sourcePath: 'docs/WIO_0_20_5_RELEASE_NOTES.md',
+  },
   {
     id: 'builtin-methods',
     title: 'Built-in Method Reference',
