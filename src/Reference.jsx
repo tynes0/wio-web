@@ -159,7 +159,8 @@ export function Docs({ id, anchor }) {
 
 export function Std({ id = '', anchor = '' }) {
   const [query, setQuery] = useState('')
-  const [apiQuery, setApiQuery] = useState('')
+  const [apiSearch, setApiSearch] = useState({ id: '', query: '' })
+  const apiQuery = apiSearch.id === id ? apiSearch.query : ''
   const [inventory, setInventory] = useState(null)
   useEffect(() => {
     const controller = new AbortController()
@@ -306,7 +307,7 @@ export function Std({ id = '', anchor = '' }) {
                         type="search"
                         placeholder="Method, parameter, return type…"
                         value={apiQuery}
-                        onChange={(event) => setApiQuery(event.target.value)}
+                        onChange={(event) => setApiSearch({ id, query: event.target.value })}
                       />
                     </label>
                     {filteredDeclarations.map((item, i) => (
