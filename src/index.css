@@ -1,96 +1,109 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
-  --canvas: #f4f6fa;
-  --surface: #ffffff;
-  --surface-soft: #f0f3ff;
-  --surface-warm: #f1f4f9;
-  --ink: #172033;
-  --ink-soft: #3d485d;
-  --muted: #6f7889;
-  --muted-strong: #566178;
-  --line: #dfe3ea;
-  --line-strong: #cbd2dd;
-  --accent: #315bf4;
-  --accent-deep: #2344c9;
-  --accent-soft: #e4eaff;
-  --accent-ink: #ffffff;
-  --coral: #5b7cff;
-  --lime: #dce5ff;
-  --code-bg: #172033;
-  --code-ink: #edf2ff;
-  --shadow-soft: 0 16px 44px rgba(42, 52, 75, 0.08);
-  --shadow-float: 0 26px 70px rgba(30, 40, 65, 0.14);
-  --font-body: 'Manrope', 'Segoe UI', sans-serif;
-  --font-heading: 'Manrope', 'Segoe UI', sans-serif;
-  --font-mono: 'DM Mono', 'Cascadia Code', monospace;
-
-  color: var(--ink-soft);
-  background: var(--canvas);
-  font: 15px/1.65 var(--font-body);
+  font-family: 'DM Sans', Arial, sans-serif;
+  color: #20211f;
+  background: #eeede9;
+  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --paper: #eeede9;
+  --ink: #20211f;
+  --muted: #65655f;
+  --line: #d1d0ca;
+  --accent: #393b37;
+  --mono: 'IBM Plex Mono', Consolas, monospace;
+  --serif: Georgia, 'Times New Roman', serif;
+  --scroll-turn: 0deg;
+  --scroll-drift: 0px;
 }
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-
+* {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
-  overflow-x: hidden;
-  background:
-    radial-gradient(circle at 8% 8%, rgba(190, 207, 255, 0.5), transparent 25rem),
-    radial-gradient(circle at 62% 0%, rgba(218, 225, 239, 0.62), transparent 28rem),
-    radial-gradient(circle at 96% 18%, rgba(196, 214, 255, 0.52), transparent 25rem),
-    linear-gradient(rgba(23, 32, 51, 0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 32, 51, 0.018) 1px, transparent 1px),
-    var(--canvas);
-  background-size: 32px 32px;
 }
-
-body, button, input { font: inherit; }
-button { color: inherit; }
-#root { min-height: 100vh; }
-
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  color: var(--ink);
-  font-family: var(--font-heading);
-  line-height: 1.08;
+button,
+input,
+select {
+  font: inherit;
 }
-
-h1 {
-  max-width: 900px;
-  font-size: clamp(3rem, 6.4vw, 6.25rem);
-  font-weight: 800;
-  letter-spacing: -0.072em;
+button,
+a,
+input,
+select,
+summary {
+  -webkit-tap-highlight-color: transparent;
 }
-
-h2 {
-  font-size: clamp(1.75rem, 3vw, 3rem);
-  font-weight: 750;
+button,
+summary {
+  cursor: pointer;
+}
+button {
+  color: inherit;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+p {
+  line-height: 1.65;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+h1,
+h2,
+h3 {
+  font-weight: 500;
   letter-spacing: -0.045em;
 }
-
-h3 { font-size: 1.08rem; letter-spacing: -0.02em; }
-p { margin: 0; }
-code, pre, kbd { font-family: var(--font-mono); }
-
-code {
-  padding: 0.14rem 0.34rem;
-  border-radius: 5px;
-  background: #edf0f5;
-  color: #273452;
-  font-size: 0.92em;
+em {
+  font-family: var(--serif);
+  font-weight: 400;
 }
-
-a { color: inherit; }
-::selection { background: #cad5ff; color: var(--ink); }
-
-@media (max-width: 760px) {
-  :root { font-size: 14px; }
-  h1 { font-size: clamp(2.7rem, 15vw, 4.4rem); }
+code,
+pre,
+kbd {
+  font-family: var(--mono);
+}
+pre {
+  line-height: 1.75;
+  tab-size: 4;
+}
+button,
+input,
+select {
+  border-radius: 0;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+::selection {
+  background: #cecec5;
+  color: #161715;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 110px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

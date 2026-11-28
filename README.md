@@ -1,21 +1,18 @@
 # Wio Web
 
-This folder hosts the static Wio website.
-
-The site package follows the Wio product release line. This branch targets Wio
-`0.19.0`; canonical content and the VS Code extension use the same version.
-The download recommendation still comes from published GitHub releases, not
-this documentation version. Merge the compiler documentation before deploying
-new catalog entries, and do not announce an unpublished candidate as available.
-
-It is intentionally designed to work well on Vercel without a custom backend.
+The Wio learning website uses React and Vite, with a small cached Vercel function
+for the GitHub release feed. Documentation and std sources follow the published
+Wio `0.20.4` baseline. Downloads follow the latest published stable release,
+independently of the documentation baseline.
 
 ## What the site does
 
-- renders the canonical Wio markdown documentation from the main `tynes0/wio` GitHub repository
-- fetches the latest GitHub release from the Wio releases API
-- recommends a download asset for the current platform when a release exists
-- falls back gracefully when there is no tagged release yet
+- Offers complete, searchable Wio recipes and a multi-module Pulse project.
+- Bundles the canonical documentation and all std source modules from the release tag.
+- Shows source-level std declaration signatures, including compatibility/private declarations.
+- Reads release notes and assets automatically from GitHub, with older releases and pagination.
+- Recommends only a compatible platform/architecture installer or portable archive.
+- Supports keyboard navigation, command search, responsive layouts, and reduced motion.
 
 ## Source of truth
 
@@ -24,12 +21,20 @@ The documentation source of truth remains in the main Wio repository:
 - `README.md`
 - `docs/`
 
-The website does not keep a second hand-maintained copy of those docs. It reads the markdown directly from GitHub raw URLs so the repo docs and the site stay aligned.
+`scripts/sync-content.mjs` downloads the documentation catalog and the actual std
+inventory from the `documentedWioVersion` tag into ignored `public/content/`.
+This happens before every production build. Documents are served locally, with
+a version-pinned GitHub raw fallback. Updating the product baseline refreshes
+the std page without duplicating its signatures by hand.
+
+The new geometric W logo is preserved as `public/wio-logo.png`. CSS crops only
+its display viewport; the supplied image is not modified.
 
 ## Local development
 
 ```powershell
-npm install
+npm ci
+npm run sync-content
 npm run dev
 ```
 
@@ -39,11 +44,29 @@ npm run dev
 npm run build
 ```
 
-The site outputs a static `dist/` folder and does not require a custom server.
+The build runs the content sync, version/catalog checks, Node tests, and Vite.
+The static output is `dist/`. On Vercel, `api/releases.js` supplies the live feed.
+On static hosting or the Vite dev server, the deployment snapshot remains usable.
+
+## Example validation
+
+With a released Wio toolchain on PATH (or `WIO_EXECUTABLE` set):
+
+```sh
+npm run test:examples
+npm run test:examples -- --run
+npm run test:examples -- --run-examples
+```
+
+The first command checks every recipe and the Pulse project. `--run` also runs
+Pulse on native and VM backends. `--run-examples` runs the individual recipes
+with the default native backend and compares declared expected outputs.
+Generated fixtures stay in ignored `.example-validation/` and can be removed
+after validation; no compiler/runtime source is modified.
 
 ## Vercel deployment
 
-This project is Vercel-friendly as a normal static Vite app.
+Retain the existing Wio Vercel project and its production alias.
 
 Recommended settings:
 
@@ -55,8 +78,21 @@ Because documentation selection uses hash-based navigation (`#docs/...`), the si
 
 ## Release downloads
 
-The downloader card reads:
+The client first requests `/api/releases`. The function caches public GitHub
+responses for five minutes at the edge and supports bounded archive pagination.
+No GitHub token is shipped to visitors. If the service fails, the client tries
+the deployment snapshot, then GitHub directly. Snapshot use is labeled.
 
-- `https://api.github.com/repos/tynes0/wio/releases/latest`
+Asset links use GitHub's `browser_download_url` directly. The website does not
+fetch installer bytes through CORS or proxy large binaries. VSIX files,
+checksums, scripts, and foreign-platform packages cannot become the recommended
+toolchain download. Missing platform/architecture packages show source-build
+guidance and a working GitHub release link instead.
 
-If no release exists yet, the UI shows a friendly fallback and points users toward the source repository instead of breaking.
+## Interaction design
+
+The graphite/stone palette follows the supplied W mark. Editorial type, numbered
+code scenes, hover/focus navigation previews, a compact sticky header, and
+scroll-stacked explanation panels adapt the supplied design references to a
+code-first learning site. Mobile layouts avoid stacked overlap. Motion respects
+`prefers-reduced-motion`; scrolling is never hijacked and content has no preloader.
